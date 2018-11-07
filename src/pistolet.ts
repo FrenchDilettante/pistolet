@@ -69,7 +69,7 @@ export class Pistolet {
   }
 
   reset() {
-    this.scenarios.forEach((s) => s.reset());
+    this.scenarios.forEach((s) => s.reset && s.reset());
   }
 
   startServer() {
