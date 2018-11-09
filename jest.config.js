@@ -29,6 +29,7 @@ module.exports = {
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns: [
     '/node_modules/',
+    '/jest.config.js',
     '/rollup.config.js',
   ],
 
@@ -58,7 +59,7 @@ module.exports = {
   // A set of global variables that need to be available in all test environments
   globals: {
     "ts-jest": {
-      "tsConfigFile": "tsconfig.json"
+      "tsConfig": "tsconfig.json"
     }
   },
 

@@ -1,46 +1,54 @@
-export default function bodyEqual(a: any, b: any) {
-  if (a === b) {
+export default function bodyEqual(mock: any, request: any) {
+  if (mock === request) {
     return true;
   }
 
-  if (!a || !b || typeof a !== 'object' || typeof b !== 'object') {
+  if (!mock || !request) {
     return false;
   }
 
-  const arrA = Array.isArray(a);
-  const arrB = Array.isArray(b);
+  if (mock instanceof RegExp) {
+    return mock.test(request);
+  }
+
+  if (typeof mock !== 'object' || typeof request !== 'object') {
+    return false;
+  }
+
+  const arrA = Array.isArray(mock);
+  const arrB = Array.isArray(request);
 
   if (arrA !== arrB) {
     return false;
   }
 
   if (arrA && arrB) {
-    if (a.length !== b.length) {
+    if (mock.length !== request.length) {
       return false;
     }
-    for (let i = 0; i < a.length; i++) {
-      if (!bodyEqual(a[i], b[i])) {
+    for (let i = 0; i < mock.length; i++) {
+      if (!bodyEqual(mock[i], request[i])) {
         return false;
       }
     }
     return true;
   }
 
-  const keysA = Object.keys(a);
-  const keysB = Object.keys(b);
+  const keysA = Object.keys(mock);
+  const keysB = Object.keys(request);
 
   if (keysA.length !== keysB.length) {
     return false;
   }
 
   for (const key of keysA) {
-    if (!b.hasOwnProperty(key)) {
+    if (!request.hasOwnProperty(key)) {
       return false;
     }
   }
 
   for (const key of keysA) {
-    if (!bodyEqual(a[key], !b[key])) {
+    if (!bodyEqual(mock[key], request[key])) {
       return false;
     }
   }
