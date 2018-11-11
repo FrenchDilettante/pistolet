@@ -1,0 +1,10 @@
+{
+  "name": "A basic request",
+  "request": {
+    "method": "GET",
+    "path": "/api/endpoint"
+  },
+  "response": {
+    "data": "Hello, World!"
+  }
+}

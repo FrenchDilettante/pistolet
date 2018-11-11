@@ -31,6 +31,9 @@ module.exports = {
     '/node_modules/',
     '/jest.config.js',
     '/rollup.config.js',
+    '/test/',
+    'tsconfig.json',
+    'tslint.json',
   ],
 
   // A list of reporter names that Jest uses when writing coverage reports
@@ -72,7 +75,8 @@ module.exports = {
   moduleFileExtensions: [
     "ts",
     "tsx",
-    "js"
+    "js",
+    "json",
   ],
 
   // A map from regular expressions to module names that allow to stub out resources with a single module

@@ -3,7 +3,9 @@
     "moduleResolution": "node",
     "target": "es2017",
     "declaration": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
     "strict": true,
-    "allowSyntheticDefaultImports": true
+    "strictNullChecks": true
   }
 }

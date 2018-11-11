@@ -1,4 +1,4 @@
-import bodyEqual from './body-equal';
+import bodyEqual from '../src/body-equal';
 
 describe('bodyEqual()', () => {
   it('should compare numbers and strings', () => {
