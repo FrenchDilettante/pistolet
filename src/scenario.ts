@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { Mock } from './mock';
+import { Mock, MockMatch } from './mock';
 
 export interface Scenario {
-  mocks?: Mock[];
-  next(request: Request, response: Response, matches: Mock[]): Mock | boolean | void;
+  mocks: Mock[];
+  next(request: Request, response: Response, match: Mock): MockMatch;
   reset?(): void;
   stop?(): void;
 }

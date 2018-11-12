@@ -50,8 +50,8 @@ export class Pistolet {
   onRequest(request: Request, response: Response) {
     console.debug(`"${request.method} ${request.url}"`);
     for (const scenario of this.scenarios) {
-      const mocks = scenario.mocks ? this.matcher.filter(request, scenario.mocks) : [];
-      const result = scenario.next(request, response, mocks);
+      const match = this.matcher.findMatch(request, scenario.mocks);
+      const result = scenario.next(request, response, match);
       if (result === true) {
         return;
       }

@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { Mock } from './mock';
+import { Mock, MockMatch } from './mock';
 import { Scenario } from './scenario';
 
 export class DefaultScenario implements Scenario {
   constructor(public mocks: Mock[]) { }
 
-  next(request: Request, response: Response, matches: Mock[]) {
-    return matches[0];
+  next(request: Request, response: Response, match: MockMatch): MockMatch {
+    return match;
   }
 }

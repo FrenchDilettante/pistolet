@@ -14,3 +14,5 @@ export interface Mock {
   request: RequestMock;
   response: ResponseMock;
 }
+
+export type MockMatch = Mock | boolean | undefined;

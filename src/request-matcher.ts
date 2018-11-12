@@ -1,10 +1,15 @@
 import { Request } from 'express';
 import bodyEqual from './body-equal';
-import { Mock } from './mock';
+import { Mock, MockMatch } from './mock';
 
 export class RequestMatcher {
-  filter(request: Request, mocks: Mock[]): Mock[] {
-    return mocks.filter((mock) => this.matches(request, mock));
+  findMatch(request: Request, mocks: Mock[]): Mock {
+    for (const mock of mocks) {
+      if (this.matches(request, mock)) {
+        return mock;
+      }
+    }
+    return undefined;
   }
 
   matches(request: Request, mock: Mock): boolean {
@@ -16,10 +21,10 @@ export class RequestMatcher {
       return false;
     }
 
-    if (mock.request.body !== undefined && bodyEqual(mock.request.body, request.body)) {
-      return false;
+    if (mock.request.body === undefined) {
+      return true;
     }
 
-    return true;
+    return bodyEqual(mock.request.body, request.body);
   }
 }
