@@ -9,7 +9,8 @@
     "build": "rollup --config rollup.config.js",
     "start": "rollup --config rollup.config.js --watch",
     "test": "jest",
-    "lint": "tslint --config tslint.json --format stylish 'src/**/*.ts'"
+    "lint": "tslint --config tslint.json --format stylish 'src/**/*.ts'",
+    "prepublish": "npm run-script build"
   },
   "author": "Emmanuel Bourgerie <manu@bourgerie.fr>",
   "license": "MIT",
