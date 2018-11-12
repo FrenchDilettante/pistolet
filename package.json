@@ -1,6 +1,6 @@
 {
   "name": "pistolet",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "EventSource mocking tool",
   "main": "dist/pistolet.js",
   "typings": "dist/main.d.ts",
