@@ -1,0 +1,10 @@
+{
+  "extends": [
+    "../tslint.json",
+    "tslint-jasmine-rules"
+  ],
+  "rules": {
+    "no-var-requires": false,
+    "no-focused-tests": true
+  }
+}

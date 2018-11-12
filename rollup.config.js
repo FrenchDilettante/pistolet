@@ -10,6 +10,7 @@ export default {
     'cors',
     'express',
     'http',
+    'path',
   ],
   plugins: [
     typescript({

@@ -8,8 +8,10 @@
     "prebuild": "rimraf dist",
     "build": "rollup --config rollup.config.js",
     "start": "rollup --config rollup.config.js --watch",
-    "test": "jest",
-    "lint": "tslint --config tslint.json --format stylish 'src/**/*.ts'",
+    "test": "jest --coverage",
+    "lint": "npm run lint:src && npm run lint:test",
+    "lint:src": "tslint --config tslint.json --format stylish 'src/**/*.ts'",
+    "lint:test": "tslint --config test/tslint.json --format stylish 'test/**/*.ts'",
     "prepublish": "npm run-script build"
   },
   "author": "Emmanuel Bourgerie <manu@bourgerie.fr>",
@@ -30,6 +32,7 @@
     "rollup-plugin-typescript2": "^0.17.2",
     "ts-jest": "^23.10.4",
     "tslint": "^5.11.0",
+    "tslint-jasmine-rules": "^1.5.1",
     "typescript": "^3.1.6"
   },
   "dependencies": {

@@ -2,11 +2,15 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import express, { Request, Response } from 'express';
 import { Server } from 'http';
+import { join } from 'path';
 
+import { getConfig } from './config';
 import { DefaultScenario } from './default-scenario';
 import { Mock } from './mock';
 import { RequestMatcher } from './request-matcher';
 import { Scenario } from './scenario';
+
+export type ResolvableType = Scenario | Mock | string;
 
 export class Pistolet {
   app: express.Application;
@@ -15,7 +19,7 @@ export class Pistolet {
   scenarios: Scenario[] = [];
   server: Server;
 
-  constructor(items: Array<Scenario | Mock>) {
+  constructor(items: ResolvableType[]) {
     this.loadScenarios(items);
 
     this.app = this.createServer();
@@ -33,10 +37,18 @@ export class Pistolet {
     return app;
   }
 
-  loadScenarios(items: Array<Scenario | Mock>) {
+  loadScenarioFile(path: string): Scenario {
+    const fileContent = require(join(getConfig().dir, path));
+    const mocks: Mock[] = Array.isArray(fileContent) ? fileContent : [ fileContent ];
+    return new DefaultScenario(mocks);
+  }
+
+  loadScenarios(items: ResolvableType[]) {
     const mocks: Mock[] = [];
     for (const item of items) {
-      if ('next' in item) {
+      if (typeof item === 'string') {
+        this.scenarios.push(this.loadScenarioFile(item));
+      } else if ('next' in item) {
         this.scenarios.push(item);
       } else {
         mocks.push(item);
