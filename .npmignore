@@ -1,0 +1,11 @@
+.*
+coverage/
+src/
+test/
+.travis.yml
+jest.config.js
+LICENSE
+pistolet-*.tgz
+rollup.config.js
+tsconfig.json
+tslint.json
