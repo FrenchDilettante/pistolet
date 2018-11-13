@@ -60,7 +60,6 @@ export class Pistolet {
   }
 
   onRequest(request: Request, response: Response) {
-    console.debug(`"${request.method} ${request.url}"`);
     for (const scenario of this.scenarios) {
       const match = this.matcher.findMatch(request, scenario.mocks);
       if (!match) {
@@ -89,11 +88,10 @@ export class Pistolet {
   }
 
   startServer() {
-    return this.app.listen(this.port, () => console.log(`Pistolet running on port ${this.port}`));
+    return this.app.listen(this.port);
   }
 
   stop() {
-    console.log('Stopping Pistolet server');
     this.scenarios.forEach((s) => s.stop && s.stop());
     this.server.close();
   }

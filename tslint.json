@@ -7,7 +7,6 @@
   "rules": {
     "interface-name": false,
     "member-access": false,
-    "no-console": false,
     "quotemark": [true, "single"]
   },
   "rulesDirectory": []
