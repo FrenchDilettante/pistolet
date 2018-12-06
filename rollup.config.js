@@ -6,7 +6,6 @@ const main = 'src/main.ts';
 export default {
   input: main,
   external: [
-    'body-parser',
     'cors',
     'express',
     'http',

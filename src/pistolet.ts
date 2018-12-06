@@ -1,12 +1,12 @@
-import bodyParser from 'body-parser';
 import cors from 'cors';
-import express, { Request, Response } from 'express';
+import express, { json, Request, Response } from 'express';
 import { Server } from 'http';
 import { join } from 'path';
 
 import { getConfig } from './config';
 import { DefaultScenario } from './default-scenario';
 import { Mock } from './mock';
+import { RequestLog } from './request-log';
 import { RequestMatcher } from './request-matcher';
 import { Scenario } from './scenario';
 
@@ -15,7 +15,8 @@ export type ResolvableType = Scenario | Mock | string;
 export class Pistolet {
   app: express.Application;
   matcher = new RequestMatcher();
-  port = 8081;
+  log = new RequestLog();
+  port = getConfig().port;
   scenarios: Scenario[] = [];
   server: Server;
 
@@ -33,7 +34,8 @@ export class Pistolet {
       credentials: true,
       origin: (origin, callback) => callback(null, true),
     }));
-    app.use(bodyParser.json());
+    app.use(json());
+    app.use(this.log.middleware());
     return app;
   }
 
@@ -74,16 +76,21 @@ export class Pistolet {
         continue;
       }
 
-      response.statusCode = result.response.status || 200;
+      response.status(result.response.status || 200);
       response.send(result.response.data);
       return;
     }
 
-    response.statusCode = 404;
+    response.status(404);
     response.send('not found');
   }
 
+  requestsMade() {
+    return this.log.entries;
+  }
+
   reset() {
+    this.log.clear();
     this.scenarios.forEach((s) => s.reset && s.reset());
   }
 

@@ -1,5 +1,6 @@
 export interface PistoletConfig {
   dir?: string;
+  port?: number;
 }
 
 let currentConfig: PistoletConfig = {};
@@ -9,5 +10,5 @@ export const getConfig = () => {
 };
 
 export const setConfig = (value: PistoletConfig) => {
-  currentConfig = value;
+  currentConfig = Object.assign({ port: 8080 }, currentConfig, value);
 };

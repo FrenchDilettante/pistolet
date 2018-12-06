@@ -11,6 +11,15 @@ Pistolet (pronounced pistol-eh) is a Javascript testing tool to create mock API 
 
 ## Configuration
 
+### Available configuration options
+
+```javascript
+require('pistolet').setConfig({
+  dir: path.join(__dirname, 'scenarios'),
+  port: 8080,
+});
+```
+
 ### Protractor
 
 Pistolet works with [Protractor](https://www.protractortest.org/).

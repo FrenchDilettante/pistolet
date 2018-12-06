@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import request from 'request-promise';
 import { setConfig } from '../src/config';
 import { DefaultScenario } from '../src/default-scenario';
 import { Pistolet } from '../src/pistolet';
@@ -6,7 +6,6 @@ import { Scenario } from '../src/scenario';
 
 describe('Pistolet', () => {
   let pistolet: Pistolet;
-  let spyResponse: Response;
   let spyScenario: Scenario;
 
   beforeEach(() => {
@@ -17,11 +16,6 @@ describe('Pistolet', () => {
     };
     spyOn(spyScenario, 'next');
     spyOn(spyScenario, 'reset');
-
-    spyResponse = {
-      send: () => void 0,
-    } as Response;
-    spyOn(spyResponse, 'send');
 
     setConfig({
       dir: `${__dirname}/samples`,
@@ -50,28 +44,40 @@ describe('Pistolet', () => {
       (spyScenario.next as jasmine.Spy).calls.reset();
     });
 
-    it('returns the first mock matching the request', () => {
-      const request = {
+    it('returns the first mock matching the request', async () => {
+      const response = await request({
         method: 'GET',
-        url: '/api/endpoint',
-      } as Request;
-      pistolet.onRequest(request, spyResponse);
+        resolveWithFullResponse: true,
+        url: 'http://localhost:8080/api/endpoint',
+      });
 
-      expect(spyResponse.statusCode).toBe(200);
-      expect(spyResponse.send).toHaveBeenCalledWith('Hello, World!');
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toEqual('Hello, World!');
 
       expect(spyScenario.next).not.toHaveBeenCalled();
     });
 
-    it('returns 404 if not mock is found', () => {
-      const request = {
-        method: 'GET',
-        url: '/not/an/api/endpoint',
-      } as Request;
-      pistolet.onRequest(request, spyResponse);
+    it('returns 404 if not mock is found', async () => {
+      try {
+        await request({
+          method: 'POST',
+          resolveWithFullResponse: true,
+          url: 'http://localhost:8080/api/endpoint',
+        });
+      } catch (error) {
+        expect(error.statusCode).toBe(404);
+        expect(error.response.body).toEqual('not found');
+      }
+    });
+  });
 
-      expect(spyResponse.statusCode).toBe(404);
-      expect(spyResponse.send).toHaveBeenCalledWith('not found');
+  describe('requestsMade()', () => {
+    it('should return the requests made', async () => {
+      pistolet.loadScenarios(['basic']);
+      await request({ method: 'GET', url: 'http://localhost:8080/api/endpoint' });
+      expect(pistolet.requestsMade()).toEqual([
+        { method: 'GET', path: '/api/endpoint' },
+      ]);
     });
   });
 
