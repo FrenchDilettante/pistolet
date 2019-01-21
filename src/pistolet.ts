@@ -1,5 +1,5 @@
 import cors from 'cors';
-import express, { json, Request, Response } from 'express';
+import express, { Express, json, Request, Response } from 'express';
 import { Server } from 'http';
 import { join } from 'path';
 
@@ -28,7 +28,7 @@ export class Pistolet {
     this.app.all('*', (request, response) => this.onRequest(request, response));
   }
 
-  createServer() {
+  createServer(): Express {
     const app = express();
     app.use(cors({
       credentials: true,
