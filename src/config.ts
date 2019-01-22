@@ -1,6 +1,9 @@
+import { RequestHandler } from 'express';
+
 export interface PistoletConfig {
   dir?: string;
   port?: number;
+  middlewares?: RequestHandler[];
 }
 
 let currentConfig: PistoletConfig = {};

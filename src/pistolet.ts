@@ -1,5 +1,5 @@
 import cors from 'cors';
-import express, { Express, json, Request, Response } from 'express';
+import express, { Express, json, Request, RequestHandler, Response } from 'express';
 import { Server } from 'http';
 import { join } from 'path';
 
@@ -36,6 +36,7 @@ export class Pistolet {
     }));
     app.use(json());
     app.use(this.log.middleware());
+    (getConfig().middlewares || []).forEach((middleware) => app.use(middleware));
     return app;
   }
 
