@@ -9,5 +9,8 @@
     "member-access": false,
     "quotemark": [true, "single"]
   },
-  "rulesDirectory": []
+  "rulesDirectory": [],
+  "linterOptions": {
+    "exclude": ["*.spec.ts"]
+  }
 }

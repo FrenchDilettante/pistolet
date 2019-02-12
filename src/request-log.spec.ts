@@ -1,5 +1,5 @@
 import { Request, RequestHandler } from 'express';
-import { RequestLog } from '../src/request-log';
+import { RequestLog } from './request-log';
 
 describe('RequestLog', () => {
   let log: RequestLog;

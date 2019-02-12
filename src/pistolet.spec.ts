@@ -1,8 +1,8 @@
 import request from 'request-promise';
-import { setConfig } from '../src/config';
-import { DefaultScenario } from '../src/default-scenario';
-import { Pistolet } from '../src/pistolet';
-import { Scenario } from '../src/scenario';
+import { setConfig } from './config';
+import { DefaultScenario } from './default-scenario';
+import { Pistolet } from './pistolet';
+import { Scenario } from './scenario';
 
 describe('Pistolet', () => {
   let pistolet: Pistolet;

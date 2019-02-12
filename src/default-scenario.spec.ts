@@ -1,4 +1,4 @@
-import { DefaultScenario } from '../src/default-scenario';
+import { DefaultScenario } from './default-scenario';
 const basicMock = require('./samples/basic');
 
 describe('DefaultScenario', () => {

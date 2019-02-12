@@ -1,4 +1,4 @@
-import * as lib from '../src/main';
+import * as lib from './main';
 
 it('should provide the default exports', () => {
   expect(lib.Pistolet).toBeDefined();
