@@ -1,11 +1,15 @@
-import { browser, by, element } from 'protractor';
+import { browser, by, element, $, ExpectedConditions } from 'protractor';
 
 export class AppPage {
+  field = $('#name-field');
+  message = $('#message');
+  submitBtn = $('#submit-btn');
+
   navigateTo() {
-    return browser.get(browser.baseUrl) as Promise<any>;
+    browser.get(browser.baseUrl);
   }
 
-  getTitleText() {
-    return element(by.css('app-root h1')).getText() as Promise<string>;
+  submit() {
+    return this.submitBtn.click();
   }
 }

@@ -23,6 +23,16 @@ exports.config = {
     require('ts-node').register({
       project: require('path').join(__dirname, './tsconfig.e2e.json')
     });
+    require('pistolet').setConfig({ port: 8080 });
+
+    // TODO figure out a cleaner and more appropriate wrapper in Pistolet
+    const { browser } = require('protractor');
+    const _requestMade = require('pistolet').Pistolet.prototype.requestsMade;
+    require('pistolet').Pistolet.prototype.requestsMade = function () {
+      return browser.controlFlow().execute(() => _requestMade.apply(this));
+    };
+    // end todo
+
     jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
   }
 };

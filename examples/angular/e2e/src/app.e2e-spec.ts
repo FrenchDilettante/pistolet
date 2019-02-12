@@ -1,23 +1,24 @@
+import { Pistolet } from 'pistolet';
 import { AppPage } from './app.po';
-import { browser, logging } from 'protractor';
+import { HelloWorldScenario } from './helloWorld.scenario';
 
 describe('workspace-project App', () => {
   let page: AppPage;
+  let pistolet: Pistolet;
 
   beforeEach(() => {
+    pistolet = new Pistolet([ new HelloWorldScenario() ]);
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
-    page.navigateTo();
-    expect(page.getTitleText()).toEqual('Welcome to pistolet-angular-example!');
-  });
+  afterEach(() => pistolet.reset());
+  afterAll(() => pistolet.stop());
 
-  afterEach(async () => {
-    // Assert that there are no errors emitted from the browser
-    const logs = await browser.manage().logs().get(logging.Type.BROWSER);
-    expect(logs).not.toContain(jasmine.objectContaining({
-      level: logging.Level.SEVERE,
-    }));
+  it('should simulate a REST server', () => {
+    page.navigateTo();
+    page.field.sendKeys('Bob');
+    page.submit();
+    expect(page.message.getText()).toEqual('Hello Bob!');
+    expect(pistolet.requestsMade()).toEqual([{ method: 'POST', path: '/hello' }]);
   });
 });

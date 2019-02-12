@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="form">
+    <div class="form-group">
+      <label for="name-field">Hello</label>
+      <input id="name-field" name="name" class="form-control" [(ngModel)]="input">
+    </div>
+    <button id="submit-btn" class="btn btn-primary" (click)="submit()">Send</button>
+  </div>
+
+  <p id="message">{{ message }}</p>
+</div>
