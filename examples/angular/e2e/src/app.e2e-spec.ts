@@ -14,11 +14,11 @@ describe('workspace-project App', () => {
   afterEach(() => pistolet.reset());
   afterAll(() => pistolet.stop());
 
-  it('should simulate a REST server', () => {
-    page.navigateTo();
-    page.field.sendKeys('Bob');
-    page.submit();
-    expect(page.message.getText()).toEqual('Hello Bob!');
+  it('should simulate a REST server', async () => {
+    await page.navigateTo();
+    await page.field.sendKeys('Bob');
+    await page.submit();
+    expect(await page.message.getText()).toEqual('Hello Bob!');
     expect(pistolet.requestsMade()).toEqual([{ method: 'POST', path: '/hello' }]);
   });
 });

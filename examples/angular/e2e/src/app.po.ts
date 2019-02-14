@@ -1,4 +1,4 @@
-import { browser, by, element, $, ExpectedConditions } from 'protractor';
+import { browser, $ } from 'protractor';
 
 export class AppPage {
   field = $('#name-field');
@@ -6,7 +6,7 @@ export class AppPage {
   submitBtn = $('#submit-btn');
 
   navigateTo() {
-    browser.get(browser.baseUrl);
+    return browser.get(browser.baseUrl);
   }
 
   submit() {

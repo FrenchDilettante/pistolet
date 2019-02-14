@@ -14,6 +14,7 @@ exports.config = {
   directConnect: true,
   baseUrl: 'http://localhost:4200/',
   framework: 'jasmine',
+  SELENIUM_PROMISE_MANAGER: false,
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 30000,
@@ -24,14 +25,6 @@ exports.config = {
       project: require('path').join(__dirname, './tsconfig.e2e.json')
     });
     require('pistolet').setConfig({ port: 8080 });
-
-    // TODO figure out a cleaner and more appropriate wrapper in Pistolet
-    const { browser } = require('protractor');
-    const _requestMade = require('pistolet').Pistolet.prototype.requestsMade;
-    require('pistolet').Pistolet.prototype.requestsMade = function () {
-      return browser.controlFlow().execute(() => _requestMade.apply(this));
-    };
-    // end todo
 
     jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
   }
