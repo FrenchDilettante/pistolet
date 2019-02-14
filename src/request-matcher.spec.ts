@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { RequestMatcher } from './request-matcher';
-const basicRequest = require('./samples/basic');
+const basicRequest = require('./sample-request');
 
 describe('RequestMatcher', () => {
   let matcher: RequestMatcher;

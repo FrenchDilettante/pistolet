@@ -18,7 +18,7 @@ describe('Pistolet', () => {
     spyOn(spyScenario, 'reset');
 
     setConfig({
-      dir: `${__dirname}/samples`,
+      dir: __dirname,
     });
     pistolet = new Pistolet([]);
   });
@@ -31,7 +31,7 @@ describe('Pistolet', () => {
 
   describe('loadScenarioFile()', () => {
     it('should load a singe mock from a json file', () => {
-      const scenario = pistolet.loadScenarioFile('basic');
+      const scenario = pistolet.loadScenarioFile('sample-request');
       expect(scenario).toBeDefined();
       expect(scenario instanceof DefaultScenario).toBe(true);
       expect(scenario.mocks[0].request).toEqual({ method: 'GET', path: '/api/endpoint' });
@@ -40,7 +40,7 @@ describe('Pistolet', () => {
 
   describe('onRequest()', () => {
     beforeEach(() => {
-      pistolet.loadScenarios([spyScenario, 'basic']);
+      pistolet.loadScenarios([spyScenario, 'sample-request']);
       (spyScenario.next as jasmine.Spy).calls.reset();
     });
 
@@ -73,7 +73,7 @@ describe('Pistolet', () => {
 
   describe('requestsMade()', () => {
     it('should return the requests made', async () => {
-      pistolet.loadScenarios(['basic']);
+      pistolet.loadScenarios(['sample-request']);
       await request({ method: 'GET', url: 'http://localhost:8080/api/endpoint' });
       expect(pistolet.requestsMade()).toEqual([
         { method: 'GET', path: '/api/endpoint' },
