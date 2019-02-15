@@ -3,7 +3,6 @@
     "moduleResolution": "node",
     "target": "es2017",
     "declaration": false,
-    "declarationDir": "typings",
     "esModuleInterop": true,
     "noImplicitAny": true,
     "strict": true,
