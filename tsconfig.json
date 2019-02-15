@@ -2,7 +2,8 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "target": "es2017",
-    "declaration": true,
+    "declaration": false,
+    "declarationDir": "typings",
     "esModuleInterop": true,
     "noImplicitAny": true,
     "strict": true,

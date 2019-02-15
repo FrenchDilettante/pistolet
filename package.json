@@ -5,13 +5,13 @@
   "main": "dist/pistolet.js",
   "typings": "dist/main.d.ts",
   "scripts": {
-    "prebuild": "rimraf dist",
+    "prebuild": "rimraf dist backends",
     "build": "rollup --config rollup.config.js",
     "start": "rollup --config rollup.config.js --watch",
     "test": "jest --coverage",
     "lint": "npm run lint:src && npm run lint:test",
-    "lint:src": "tslint --config tslint.json --format stylish 'src/**/*.ts'",
-    "lint:test": "tslint --config test/tslint.json --format stylish 'test/**/*.ts'",
+    "lint:src": "tslint --config src/tslint.json --format stylish 'src/**/*.ts'",
+    "lint:test": "tslint --config src/tslint.spec.json --format stylish 'src/**/*.spec.ts'",
     "prepare": "npm run-script build"
   },
   "author": "Emmanuel Bourgerie <manu@bourgerie.fr>",
@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "debug": "^4.1.1",
     "express": "^4.16.4"
   }
 }

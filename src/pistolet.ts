@@ -1,43 +1,27 @@
-import cors from 'cors';
-import express, { Express, json, Request, RequestHandler, Response } from 'express';
-import { Server } from 'http';
 import { join } from 'path';
+import { Request, Response } from './backend';
 
 import { getConfig } from './config';
 import { DefaultScenario } from './default-scenario';
 import { Mock } from './mock';
-import { RequestLog } from './request-log';
 import { RequestMatcher } from './request-matcher';
 import { Scenario } from './scenario';
 
 export type ResolvableType = Scenario | Mock | string;
 
 export class Pistolet {
-  app: express.Application;
+  debug = require('debug')('pistolet');
+
+  backend = new (getConfig().backend)();
   matcher = new RequestMatcher();
-  log = new RequestLog();
-  port = getConfig().port;
   scenarios: Scenario[] = [];
-  server: Server;
 
   constructor(items: ResolvableType[]) {
     this.loadScenarios(items);
 
-    this.app = this.createServer();
-    this.server = this.startServer();
-    this.app.all('*', (request, response) => this.onRequest(request, response));
-  }
-
-  createServer(): Express {
-    const app = express();
-    app.use(cors({
-      credentials: true,
-      origin: (origin, callback) => callback(null, true),
-    }));
-    app.use(json());
-    app.use(this.log.middleware());
-    (getConfig().middlewares || []).forEach((middleware) => app.use(middleware));
-    return app;
+    this.backend.init(getConfig());
+    this.backend.start();
+    this.backend.on('request', (request, response) => this.onRequest(request, response));
   }
 
   loadScenarioFile(path: string): Scenario {
@@ -63,6 +47,7 @@ export class Pistolet {
   }
 
   onRequest(request: Request, response: Response) {
+    this.debug('Received %s %s', request.method, request.url);
     for (const scenario of this.scenarios) {
       const match = this.matcher.findMatch(request, scenario.mocks);
       if (!match) {
@@ -77,7 +62,9 @@ export class Pistolet {
         continue;
       }
 
-      response.status(result.response.status || 200);
+      const status = result.response.status || 200;
+      this.debug('Sending %d %j', status, result.response.data);
+      response.status(status);
       response.send(result.response.data);
       return;
     }
@@ -87,20 +74,16 @@ export class Pistolet {
   }
 
   requestsMade() {
-    return this.log.entries;
+    return this.backend.requestsMade();
   }
 
   reset() {
-    this.log.clear();
+    this.backend.reset();
     this.scenarios.forEach((s) => s.reset && s.reset());
-  }
-
-  startServer() {
-    return this.app.listen(this.port);
   }
 
   stop() {
     this.scenarios.forEach((s) => s.stop && s.stop());
-    this.server.close();
+    this.backend.stop();
   }
 }

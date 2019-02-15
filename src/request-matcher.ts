@@ -1,6 +1,6 @@
-import { Request } from 'express';
+import { Request } from './backend';
 import bodyEqual from './body-equal';
-import { Mock, MockMatch } from './mock';
+import { Mock } from './mock';
 
 export class RequestMatcher {
   findMatch(request: Request, mocks: Mock[]): Mock {

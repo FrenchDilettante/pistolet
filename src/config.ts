@@ -1,17 +1,24 @@
-import { RequestHandler } from 'express';
+import { Backend } from './backend';
 
-export interface PistoletConfig {
-  dir?: string;
-  port?: number;
-  middlewares?: RequestHandler[];
+interface BackendConstructor {
+  new (): Backend;
 }
 
-let currentConfig: PistoletConfig = {};
+export interface PistoletConfig {
+  backend: BackendConstructor;
+  dir: string;
+  [key: string]: any;
+}
 
-export const getConfig = () => {
+let currentConfig: PistoletConfig;
+
+export function getConfig() {
+  if (currentConfig === undefined) {
+    currentConfig = { backend: undefined, dir: '' };
+  }
   return currentConfig;
-};
+}
 
-export const setConfig = (value: PistoletConfig) => {
-  currentConfig = Object.assign({ port: 8080 }, currentConfig, value);
-};
+export function setConfig(value: PistoletConfig) {
+  currentConfig = value;
+}

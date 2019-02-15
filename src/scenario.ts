@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response } from './backend';
 import { Mock, MockMatch } from './mock';
 
 export interface Scenario {

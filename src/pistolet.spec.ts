@@ -1,4 +1,5 @@
 import request from 'request-promise';
+import { ExpressBackend } from './backends/express/express-backend';
 import { setConfig } from './config';
 import { DefaultScenario } from './default-scenario';
 import { Pistolet } from './pistolet';
@@ -7,6 +8,14 @@ import { Scenario } from './scenario';
 describe('Pistolet', () => {
   let pistolet: Pistolet;
   let spyScenario: Scenario;
+
+  beforeAll(() => {
+    setConfig({
+      backend: ExpressBackend,
+      dir: __dirname,
+      port: 8080,
+    });
+  });
 
   beforeEach(() => {
     spyScenario = {
@@ -17,9 +26,6 @@ describe('Pistolet', () => {
     spyOn(spyScenario, 'next');
     spyOn(spyScenario, 'reset');
 
-    setConfig({
-      dir: __dirname,
-    });
     pistolet = new Pistolet([]);
   });
 

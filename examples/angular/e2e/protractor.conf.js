@@ -9,7 +9,10 @@ exports.config = {
     './src/**/*.e2e-spec.ts'
   ],
   capabilities: {
-    'browserName': 'chrome'
+    'browserName': 'chrome',
+    'chromeOptions': {
+      args: ['--headless', '--disable-gpu'],
+    },
   },
   directConnect: true,
   baseUrl: 'http://localhost:4200/',
@@ -24,7 +27,10 @@ exports.config = {
     require('ts-node').register({
       project: require('path').join(__dirname, './tsconfig.e2e.json')
     });
-    require('pistolet').setConfig({ port: 8080 });
+    require('pistolet').setConfig({
+      backend: require('pistolet/backends/express'),
+      port: 8080,
+    });
 
     jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
   }

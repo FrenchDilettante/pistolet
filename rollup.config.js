@@ -1,22 +1,38 @@
 import typescript from 'rollup-plugin-typescript2';
 import pkg from './package.json';
 
-const main = 'src/main.ts';
+const plugins = [
+  typescript({
+    useTsconfigDeclarationDir: true,
+    tsconfigOverride: {
+      compilerOptions: {
+      },
+      exclude: [ '**/*.spec.ts', 'examples/**/*.ts' ],
+    },
+  }),
+];
 
-export default {
-  input: main,
+export default [{
+  input: 'src/index.ts',
+  external: [
+    'debug',
+    'path',
+  ],
+  plugins,
+  output: { file: pkg.main, format: 'cjs' },
+}, {
+  input: 'src/backends/express/index.ts',
   external: [
     'cors',
+    'debug',
+    'events',
     'express',
     'http',
     'path',
   ],
-  plugins: [
-    typescript({
-      tsconfigOverride: {
-        exclude: [ '**/*.spec.ts' ],
-      },
-    }),
-  ],
-  output: { file: pkg.main, format: 'cjs' },
-};
+  plugins,
+  output: {
+    file: 'backends/express.js',
+    format: 'cjs',
+  },
+}];
