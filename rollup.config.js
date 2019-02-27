@@ -16,9 +16,6 @@ export default [{
   plugins: [
     typescript({
       tsconfigOverride: {
-        compilerOptions: {
-          declaration: true,
-        },
         exclude: ['**/*.spec.ts', 'examples/**/*.ts'],
       },
     }),

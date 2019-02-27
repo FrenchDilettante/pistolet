@@ -2,10 +2,10 @@
   "name": "pistolet",
   "version": "0.5.0",
   "description": "EventSource mocking tool",
-  "main": "dist/pistolet.js",
-  "typings": "dist/index.d.ts",
+  "main": "pistolet.js",
+  "typings": "pistolet.d.ts",
   "scripts": {
-    "prebuild": "rimraf dist backends",
+    "prebuild": "rimraf pistolet.js backends",
     "build": "rollup --config rollup.config.js",
     "start": "rollup --config rollup.config.js --watch",
     "test": "jest --coverage",
