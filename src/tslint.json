@@ -6,7 +6,9 @@
   "jsRules": {},
   "rules": {
     "interface-name": false,
+    "max-classes-per-file": false,
     "member-access": false,
+    "no-empty": false,
     "quotemark": [true, "single"]
   },
   "rulesDirectory": [],

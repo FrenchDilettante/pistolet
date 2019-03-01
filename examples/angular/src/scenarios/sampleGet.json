@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sample"
+  },
+  "response": {
+    "data": {
+      "message": "Sample Response"
+    }
+  }
+}

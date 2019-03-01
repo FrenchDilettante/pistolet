@@ -93,3 +93,24 @@ declare module 'pistolet/backends/express' {
     stop(): void;
   }
 }
+
+declare module 'pistolet/backends/angular' {
+  import { HttpClient as NgHttpClient } from '@angular/common/http';
+  import { EventEmitter } from 'events';
+  import { Backend, PistoletConfig, Request, RequestEntry, Response } from 'pistolet';
+
+  export class AngularBackend extends EventEmitter implements Backend {
+    init(config: PistoletConfig): void;
+    process(request: Request, response: Response): void;
+    requestsMade(): RequestEntry[];
+    reset(): void;
+    start(): void;
+    stop(): void;
+  }
+
+  export class HttpClient extends NgHttpClient {
+  }
+
+  export class HttpClientModule {
+  }
+}

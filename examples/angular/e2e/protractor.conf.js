@@ -28,8 +28,9 @@ exports.config = {
       project: require('path').join(__dirname, './tsconfig.e2e.json')
     });
     require('pistolet').setConfig({
-      backend: require('pistolet/backends/express'),
+      backend: require('pistolet/backends/express').ExpressBackend,
       port: 8080,
+      dir: require('path').resolve(__dirname, '../src/scenarios'),
     });
 
     jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));

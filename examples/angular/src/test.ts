@@ -7,6 +7,9 @@ import {
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
 
+import { setConfig } from 'pistolet';
+import { AngularBackend } from 'pistolet/backends/angular';
+
 declare const require: any;
 
 // First, initialize the Angular testing environment.
@@ -18,3 +21,8 @@ getTestBed().initTestEnvironment(
 const context = require.context('./', true, /\.spec\.ts$/);
 // And load the modules.
 context.keys().map(context);
+
+beforeAll(() => setConfig({
+  backend: AngularBackend,
+  dir: '',
+}));

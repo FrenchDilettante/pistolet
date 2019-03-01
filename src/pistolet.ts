@@ -1,4 +1,3 @@
-import { join } from 'path';
 import { Request, Response } from './backend';
 
 import { getConfig } from './config';
@@ -25,7 +24,7 @@ export class Pistolet {
   }
 
   loadScenarioFile(path: string): Scenario {
-    const fileContent = require(join(getConfig().dir, path));
+    const fileContent = require(getConfig().dir + '/' + path);
     const mocks: Mock[] = Array.isArray(fileContent) ? fileContent : [ fileContent ];
     return new DefaultScenario(mocks);
   }

@@ -4,6 +4,7 @@
     "target": "es2017",
     "declaration": false,
     "esModuleInterop": true,
+    "experimentalDecorators": true,
     "noImplicitAny": true,
     "strict": true,
     "strictNullChecks": false
