@@ -1,6 +1,6 @@
 {
   "name": "pistolet-express",
-  "version": "0.0.0",
+  "version": "0.6.0",
   "description": "Express integration for Pistolet",
   "author": "Emmanuel Bourgerie <manu@bourgerie.fr>",
   "license": "MIT",
@@ -20,8 +20,8 @@
     "pistolet": "^0.5.0"
   },
   "devDependencies": {
-    "pistolet": "../core",
     "@types/cors": "^2.8.4",
-    "@types/express": "^4.16.0"
+    "@types/express": "^4.16.0",
+    "pistolet": "../core"
   }
 }
