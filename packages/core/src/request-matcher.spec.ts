@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import { Request } from './backend';
 import { RequestMatcher } from './request-matcher';
 const basicRequest = require('./sample-request');
 

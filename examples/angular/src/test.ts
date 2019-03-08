@@ -8,7 +8,7 @@ import {
 } from '@angular/platform-browser-dynamic/testing';
 
 import { setConfig } from 'pistolet';
-import { AngularBackend } from 'pistolet/backends/angular';
+import { AngularBackend } from 'pistolet-angular';
 
 declare const require: any;
 

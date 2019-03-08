@@ -1,25 +1,28 @@
 import typescript from 'rollup-plugin-typescript2';
-import pkg from './package.json';
 
-const typescriptPlugin = typescript({
-  tsconfigOverride: {
-    exclude: ['**/*.spec.ts', 'examples/**/*.ts'],
-  },
-});
+function typescriptPlugin(subfolder) {
+  return typescript({
+    tsconfigOverride: {
+      declarationDir: `packages/${subfolder}/dist`,
+      include: [ `packages/${subfolder}/src/*` ],
+      exclude: [ '**/*.spec.ts' ],
+    },
+  });
+}
 
 export default [{
-  input: 'src/index.ts',
+  input: 'packages/core/src/index.ts',
   external: [
     'debug',
   ],
-  plugins: [ typescriptPlugin ],
+  plugins: [ typescriptPlugin('core') ],
   output: {
-    file: pkg.main,
+    file: 'packages/core/dist/pistolet.js',
     format: 'umd',
-    name: pkg.name,
+    name: 'pistolet',
   },
 }, {
-  input: 'src/backends/angular/index.ts',
+  input: 'packages/angular/src/index.ts',
   external: [
     '@angular/common/http',
     '@angular/core',
@@ -27,22 +30,22 @@ export default [{
     'events',
     'rxjs',
   ],
-  plugins: [ typescriptPlugin ],
+  plugins: [ typescriptPlugin('angular') ],
   output: {
-    file: 'backends/angular.js',
+    file: 'packages/angular/dist/pistolet-angular.js',
     format: 'esm',
   },
 }, {
-  input: 'src/backends/express/index.ts',
+  input: 'packages/express/src/index.ts',
   external: [
     'cors',
     'debug',
     'events',
     'express',
   ],
-  plugins: [ typescriptPlugin ],
+  plugins: [ typescriptPlugin('express') ],
   output: {
-    file: 'backends/express.js',
+    file: 'packages/express/dist/pistolet-express.js',
     format: 'cjs',
   },
 }];

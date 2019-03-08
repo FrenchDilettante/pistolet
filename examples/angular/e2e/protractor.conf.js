@@ -28,7 +28,7 @@ exports.config = {
       project: require('path').join(__dirname, './tsconfig.e2e.json')
     });
     require('pistolet').setConfig({
-      backend: require('pistolet/backends/express').ExpressBackend,
+      backend: require('pistolet-express').ExpressBackend,
       port: 8080,
       dir: require('path').resolve(__dirname, '../src/scenarios'),
     });

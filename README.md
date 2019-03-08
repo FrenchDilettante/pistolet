@@ -2,43 +2,29 @@
 
 [![Build Status](https://travis-ci.org/FrenchHipster/pistolet.svg?branch=master)](https://travis-ci.org/FrenchHipster/pistolet)
 [![npm version](https://badge.fury.io/js/pistolet.svg)](https://badge.fury.io/js/pistolet)
+[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 
 Pistolet (pronounced pistol-eh) is a Javascript testing tool to create mock API responses.
+
 
 ## Installation
 
     $ npm install pistolet --save-dev
 
-## Configuration
+### Available Plugins
 
-### Available configuration options
+Pistolet does not come with any integration out-of-the-box, but has plugins to do so:
 
-```javascript
-require('pistolet').setConfig({
-  dir: path.join(__dirname, 'scenarios'),
-  port: 8080,
-});
-```
+* [Angular](https://www.npmjs.com/package/pistolet-angular) unit tests
+* [Express](https://www.npmjs.com/package/pistolet-express) backend
 
-### Protractor
 
-Pistolet works with [Protractor](https://www.protractortest.org/).
-Ensure the following options are present in `protractor.conf.js`:
-
-```javascript
-restartBrowserBetweenTests: true,
-onPrepare() {
-  require('pistolet').setConfig({
-    dir: path.join(__dirname, 'scenarios'),
-  });
-}
-````
-
-## Usage
+## General Usage
 
 ```javascript
 describe('your test suite', () => {
   beforeAll(() => {
+    // Start Pisolet, once per test suite
     server = new Pistolet([
       'scenario/from/json/file',
       new ClassScenario(),
@@ -49,14 +35,18 @@ describe('your test suite', () => {
   // Required, otherwise the server keeps running and occupies the TCP port
   afterAll(() => server.stop());
 
-  // Optional step, in case the scenarios you use are stateful
+  // Clears the request history, and resets scenarios (in case they are stateful)
   afterEach(() => server.reset());
 });
 ```
 
+**Note:** This example uses Jasmine, although this is not a requirement.  
+You are more than welcome to use it with other test suites, and contributing examples would be greatly appreciated.
+
+
 ## Writing scenarios
 
-### JSON file
+### JSON Files
 
 JSON scenarios are the easiest to write and use.
 
@@ -78,25 +68,26 @@ Make sure to set the `dir` property in the configuration for Pistolet to know wh
 }
 ```
 
-### Javascript/Typescript object
+### Javascript/Typescript Scenarios
 
 ```typescript
-export const SampleScenario: Scenario = {
+import { Mock, Request, Response, Scenario } from 'pistolet';
+
+export const SampleObjectScenario: Scenario = {
   mocks: [/* ... */],
   next(request: Request, response: Response, match: Mock) {
-    // optional function to manually handle requests
+    // Simply accept and send the mock
+    response.status(200).send(match);
   }
 }
-```
 
-### Javascript/Typescript class
-
-```typescript
-import { Mock, Scenario } from 'pistolet';
-export class SampleScenario implements Scenario {
+export class SampleClassScenario implements Scenario {
   mocks: Mock[] = [/* ... */];
   next(request: Request, response: Response, match: Mock) {
-    // optional function to manually handle requests
+    // Wait a second, and fail
+    setTimeout(() => {
+      response.status(503).send({ errorMessage: 'Some Error' });
+    }, 1000);
   }
 }
 ```

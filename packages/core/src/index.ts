@@ -1,3 +1,4 @@
+export { Backend, Request, RequestEntry, Response } from './backend';
 export { PistoletConfig, setConfig } from './config';
 export { Mock, MockMatch, RequestMock, ResponseMock } from './mock';
 export { Scenario } from './scenario';

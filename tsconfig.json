@@ -2,7 +2,7 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "target": "es2017",
-    "declaration": false,
+    "declaration": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "noImplicitAny": true,

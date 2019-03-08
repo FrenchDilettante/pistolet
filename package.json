@@ -1,18 +1,16 @@
 {
-  "name": "pistolet",
-  "version": "0.5.0",
-  "description": "HTTP mocking tool",
-  "main": "pistolet.js",
-  "typings": "pistolet.d.ts",
+  "name": "pistolet-dev",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Tooling scripts for Pistolet packages",
   "scripts": {
-    "prebuild": "rimraf pistolet.js backends",
+    "prebuild": "rimraf packages/*/dist",
     "build": "rollup --config rollup.config.js",
     "start": "rollup --config rollup.config.js --watch",
     "test": "jest --coverage",
     "lint": "npm run lint:src && npm run lint:test",
-    "lint:src": "tslint --config src/tslint.json --format stylish 'src/**/*.ts'",
-    "lint:test": "tslint --config src/tslint.spec.json --format stylish 'src/**/*.spec.ts'",
-    "prepare": "npm run-script build"
+    "lint:src": "tslint --config tslint.json --format stylish 'packages/*/src/*.ts' --exclude 'packages/*/src/*.spec.ts'",
+    "lint:test": "tslint --config tslint.spec.json --format stylish 'packages/*/src/*.spec.ts'"
   },
   "author": "Emmanuel Bourgerie <manu@bourgerie.fr>",
   "license": "MIT",
@@ -22,26 +20,18 @@
   },
   "homepage": "https://github.com/FrenchHipster/pistolet",
   "devDependencies": {
-    "@angular/common": "^7.2.7",
-    "@angular/core": "^7.2.7",
-    "@types/cors": "^2.8.4",
-    "@types/express": "^4.16.0",
     "@types/jest": "^23.3.10",
     "@types/request-promise": "^4.1.42",
     "jest": "^23.6.0",
+    "lerna": "^3.13.1",
     "request-promise": "^4.2.2",
     "rimraf": "^2.6.2",
     "rollup": "^0.67.0",
     "rollup-plugin-typescript2": "^0.17.2",
-    "rxjs": "^6.4.0",
     "ts-jest": "^23.10.4",
     "tslint": "^5.11.0",
     "tslint-jasmine-rules": "^1.5.1",
     "typescript": "^3.1.6"
   },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "debug": "^4.1.1",
-    "express": "^4.16.4"
-  }
+  "dependencies": {}
 }

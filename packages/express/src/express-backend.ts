@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 import express, { Application, json, RequestHandler } from 'express';
 import { Server } from 'http';
 
-import { Backend, RequestEntry } from '../../backend';
+import { Backend, RequestEntry } from 'pistolet';
 import { ExpressPistoletConfig } from './config';
 
 export class ExpressBackend extends EventEmitter implements Backend {

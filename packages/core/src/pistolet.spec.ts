@@ -1,5 +1,5 @@
 import request from 'request-promise';
-import { ExpressBackend } from './backends/express/express-backend';
+import { ExpressBackend } from '../../express/src/express-backend';
 import { setConfig } from './config';
 import { DefaultScenario } from './default-scenario';
 import { Pistolet } from './pistolet';

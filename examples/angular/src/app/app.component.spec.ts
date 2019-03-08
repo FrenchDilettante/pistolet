@@ -1,7 +1,7 @@
 import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { Pistolet } from 'pistolet';
-import { HttpClientModule } from 'pistolet/backends/angular';
+import { HttpClientModule } from 'pistolet-angular';
 import { AppComponent } from './app.component';
 import { HelloWorldScenario } from 'src/scenarios/helloWorld.scenario';
 

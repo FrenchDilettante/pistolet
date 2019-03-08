@@ -1,0 +1,26 @@
+{
+  "name": "pistolet-angular",
+  "version": "0.0.0",
+  "description": "Angular integration for Pistolet",
+  "author": "Emmanuel Bourgerie <manu@bourgerie.fr>",
+  "license": "MIT",
+  "main": "dist/pistolet-angular.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FrenchHipster/pistolet.git"
+  },
+  "homepage": "https://github.com/FrenchHipster/pistolet",
+  "peerDependencies": {
+    "pistolet": "^0.5.0"
+  },
+  "dependencies": {
+    "@angular/common": "^7.2.8",
+    "@angular/core": "^7.2.8",
+    "debug": "^4.1.1",
+    "rxjs": "^6.4.0"
+  },
+  "devDependencies": {
+    "pistolet": "../core"
+  }
+}

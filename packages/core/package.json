@@ -1,0 +1,17 @@
+{
+  "name": "pistolet",
+  "version": "0.0.0",
+  "description": "",
+  "author": "Emmanuel Bourgerie <manu@bourgerie.fr>",
+  "license": "MIT",
+  "main": "dist/pistolet.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FrenchHipster/pistolet.git"
+  },
+  "homepage": "https://github.com/FrenchHipster/pistolet",
+  "dependencies": {
+    "debug": "^4.1.1"
+  }
+}

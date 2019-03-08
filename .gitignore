@@ -33,6 +33,5 @@ node_modules/
 .yarn-integrity
 
 # Build artifacts
-/backends/
+/packages/*/dist/
 /.rpt2_cache/
-/pistolet.js
