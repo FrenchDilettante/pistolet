@@ -2,6 +2,7 @@ language: node_js
 node_js:
   - stable
 install:
-  - npm install
+  - npm ci
+  - lerna exec npm ci
 script:
   - npm test
