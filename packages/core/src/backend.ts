@@ -10,7 +10,7 @@ export interface Backend {
 }
 
 export interface Request {
-  body: any;
+  body?: any;
   method: string;
   url: string;
 }

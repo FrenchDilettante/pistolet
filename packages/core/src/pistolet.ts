@@ -69,7 +69,7 @@ export class Pistolet {
     }
 
     response.status(404);
-    response.send('not found');
+    response.send({ errorMessage: 'not found' });
   }
 
   requestsMade() {

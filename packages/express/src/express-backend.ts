@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 import express, { Application, json, RequestHandler } from 'express';
 import { Server } from 'http';
 
-import { Backend, RequestEntry } from 'pistolet';
+import { Backend, PistoletConfig, RequestEntry } from 'pistolet';
 import { ExpressPistoletConfig } from './config';
 
 export class ExpressBackend extends EventEmitter implements Backend {
@@ -14,8 +14,8 @@ export class ExpressBackend extends EventEmitter implements Backend {
   entries: RequestEntry[] = [];
   server: Server;
 
-  init(config: ExpressPistoletConfig) {
-    this.config = config;
+  init(config: PistoletConfig) {
+    this.config = config as ExpressPistoletConfig;
     const app = this.app = express();
     app.use(cors({
       credentials: true,

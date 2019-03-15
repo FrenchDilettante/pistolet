@@ -1,9 +1,8 @@
-import request from 'request-promise';
-import { ExpressBackend } from '../../express/src/express-backend';
 import { setConfig } from './config';
 import { DefaultScenario } from './default-scenario';
 import { Pistolet } from './pistolet';
 import { Scenario } from './scenario';
+import { TestBackend } from './test-backend';
 
 describe('Pistolet', () => {
   let pistolet: Pistolet;
@@ -11,9 +10,8 @@ describe('Pistolet', () => {
 
   beforeAll(() => {
     setConfig({
-      backend: ExpressBackend,
+      backend: TestBackend,
       dir: __dirname,
-      port: 8080,
     });
   });
 
@@ -51,10 +49,9 @@ describe('Pistolet', () => {
     });
 
     it('returns the first mock matching the request', async () => {
-      const response = await request({
+      const response = await TestBackend.request({
         method: 'GET',
-        resolveWithFullResponse: true,
-        url: 'http://localhost:8080/api/endpoint',
+        url: '/api/endpoint',
       });
 
       expect(response.statusCode).toBe(200);
@@ -64,23 +61,20 @@ describe('Pistolet', () => {
     });
 
     it('returns 404 if not mock is found', async () => {
-      try {
-        await request({
-          method: 'POST',
-          resolveWithFullResponse: true,
-          url: 'http://localhost:8080/api/endpoint',
-        });
-      } catch (error) {
-        expect(error.statusCode).toBe(404);
-        expect(error.response.body).toEqual('not found');
-      }
+      const error = await TestBackend.request({
+        method: 'POST',
+        url: '/api/endpoint',
+      });
+
+      expect(error.statusCode).toBe(404);
+      expect(error.body).toEqual({ errorMessage: 'not found' });
     });
   });
 
   describe('requestsMade()', () => {
-    it('should return the requests made', async () => {
+    it('should return the entries made', async () => {
       pistolet.loadScenarios(['sample-request']);
-      await request({ method: 'GET', url: 'http://localhost:8080/api/endpoint' });
+      await TestBackend.request({ method: 'GET', url: '/api/endpoint' });
       expect(pistolet.requestsMade()).toEqual([
         { method: 'GET', path: '/api/endpoint' },
       ]);
