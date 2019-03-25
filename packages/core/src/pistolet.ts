@@ -33,15 +33,15 @@ export class Pistolet {
     const mocks: Mock[] = [];
     for (const item of items) {
       if (typeof item === 'string') {
-        this.scenarios.push(this.loadScenarioFile(item));
+        this.scenarios.unshift(this.loadScenarioFile(item));
       } else if ('next' in item) {
-        this.scenarios.push(item);
+        this.scenarios.unshift(item);
       } else {
-        mocks.push(item);
+        mocks.unshift(item);
       }
     }
     if (mocks.length > 0) {
-      this.scenarios.push(new DefaultScenario(mocks));
+      this.scenarios.unshift(new DefaultScenario(mocks));
     }
   }
 

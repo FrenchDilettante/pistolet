@@ -42,6 +42,35 @@ describe('Pistolet', () => {
     });
   });
 
+  describe('loadScenarios', () => {
+    it('should accept a string, and load the JSON file associated', () => {
+      pistolet.loadScenarios(['sample-request']);
+      expect(pistolet.scenarios.length).toBe(1);
+      expect(pistolet.scenarios[0].mocks[0].name).toEqual('A basic request');
+    });
+
+    it('should accept an object implementing the Scenario interface', () => {
+      pistolet.loadScenarios([new DefaultScenario([{
+        name: 'A scenario class instance',
+        request: { method: 'GET', path: '/request' },
+        response: { data: 'hello world' },
+      }])]);
+
+      expect(pistolet.scenarios.length).toBe(1);
+      expect(pistolet.scenarios[0].mocks[0].name).toEqual('A scenario class instance');
+    });
+
+    it('should accept a basic Javascript object', () => {
+      pistolet.loadScenarios([{
+        name: 'A Javascript scenario object',
+        request: { method: 'GET', path: '/request' },
+        response: { data: 'hello world' },
+      }]);
+      expect(pistolet.scenarios.length).toBe(1);
+      expect(pistolet.scenarios[0].mocks[0].name).toEqual('A Javascript scenario object');
+    });
+  });
+
   describe('onRequest()', () => {
     beforeEach(() => {
       pistolet.loadScenarios([spyScenario, 'sample-request']);
