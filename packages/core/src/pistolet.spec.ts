@@ -8,6 +8,11 @@ describe('Pistolet', () => {
   let pistolet: Pistolet;
   let spyScenario: Scenario;
 
+  const sampleScenario = {
+    request: { method: 'GET', path: '/request' },
+    response: { data: 'hello world' },
+  };
+
   beforeAll(() => {
     setConfig({
       backend: TestBackend,
@@ -44,36 +49,28 @@ describe('Pistolet', () => {
 
   describe('loadScenarios', () => {
     it('should accept a string, and load the JSON file associated', () => {
-      pistolet.loadScenarios(['sample-request']);
-      expect(pistolet.scenarios.length).toBe(1);
-      expect(pistolet.scenarios[0].mocks[0].name).toEqual('A basic request');
+      const scenarios = pistolet.loadScenarios(['sample-request']);
+      expect(scenarios.length).toBe(1);
+      expect(scenarios[0].mocks[0].name).toEqual('A basic request');
     });
 
     it('should accept an object implementing the Scenario interface', () => {
-      pistolet.loadScenarios([new DefaultScenario([{
-        name: 'A scenario class instance',
-        request: { method: 'GET', path: '/request' },
-        response: { data: 'hello world' },
-      }])]);
+      const scenarios = pistolet.loadScenarios([new DefaultScenario([ sampleScenario ])]);
 
-      expect(pistolet.scenarios.length).toBe(1);
-      expect(pistolet.scenarios[0].mocks[0].name).toEqual('A scenario class instance');
+      expect(scenarios.length).toBe(1);
+      expect(scenarios[0].mocks[0].request.path).toEqual('/request');
     });
 
     it('should accept a basic Javascript object', () => {
-      pistolet.loadScenarios([{
-        name: 'A Javascript scenario object',
-        request: { method: 'GET', path: '/request' },
-        response: { data: 'hello world' },
-      }]);
-      expect(pistolet.scenarios.length).toBe(1);
-      expect(pistolet.scenarios[0].mocks[0].name).toEqual('A Javascript scenario object');
+      const scenarios = pistolet.loadScenarios([ sampleScenario ]);
+      expect(scenarios.length).toBe(1);
+      expect(scenarios[0].mocks[0].request.path).toEqual('/request');
     });
   });
 
   describe('onRequest()', () => {
     beforeEach(() => {
-      pistolet.loadScenarios([spyScenario, 'sample-request']);
+      pistolet.override(spyScenario, 'sample-request');
       (spyScenario.next as jasmine.Spy).calls.reset();
     });
 
@@ -100,9 +97,27 @@ describe('Pistolet', () => {
     });
   });
 
+  describe('override()', () => {
+    it('should place a new scenario at the front of the queue', async () => {
+      pistolet.scenarios = pistolet.loadScenarios(['sample-request']);
+      pistolet.override({
+        request: { method: 'GET', path: '/api/endpoint' },
+        response: { data: 'this is an override' },
+      });
+
+      const response = await TestBackend.request({
+        method: 'GET',
+        url: '/api/endpoint',
+      });
+      expect(response).toEqual({ body: 'this is an override', statusCode: 200 });
+    });
+  });
+
   describe('requestsMade()', () => {
     it('should return the entries made', async () => {
-      pistolet.loadScenarios(['sample-request']);
+      pistolet.override('sample-request');
+      expect(pistolet.overrides.length).toBe(1);
+
       await TestBackend.request({ method: 'GET', url: '/api/endpoint' });
       expect(pistolet.requestsMade()).toEqual([
         { method: 'GET', path: '/api/endpoint' },
@@ -112,9 +127,15 @@ describe('Pistolet', () => {
 
   describe('reset()', () => {
     it('should reset all scenarios', () => {
-      pistolet.loadScenarios([spyScenario]);
+      pistolet.scenarios = pistolet.loadScenarios([spyScenario]);
       pistolet.reset();
       expect(spyScenario.reset).toHaveBeenCalled();
+    });
+
+    it('should discard overrides', () => {
+      pistolet.override(sampleScenario);
+      pistolet.reset();
+      expect(pistolet.overrides.length).toBe(0);
     });
   });
 });

@@ -44,6 +44,20 @@ describe('your test suite', () => {
 You are more than welcome to use it with other test suites, and contributing examples would be greatly appreciated.
 
 
+### Override existing scenarios
+
+Pistolet allows to override the scenarios previously defined.  
+These overrides have a shorter lifespan and will be discarded after calling `reset()`.
+
+```javascript
+beforeAll(() => server = new Pistolet(['default/scenario']));
+
+it('should test an edge case', () => {
+  server.override('additional/scenario');
+});
+```
+
+
 ## Writing scenarios
 
 ### JSON Files

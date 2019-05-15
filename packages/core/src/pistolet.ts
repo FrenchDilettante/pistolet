@@ -9,45 +9,57 @@ import { Scenario } from './scenario';
 export type ResolvableType = Scenario | Mock | string;
 
 export class Pistolet {
+  /** @internal */
   debug = require('debug')('pistolet');
 
+  /** @internal */
   backend = new (getConfig().backend)();
+  /** @internal */
   matcher = new RequestMatcher();
-  scenarios: Scenario[] = [];
+  /** @internal */
+  overrides = new Array<Scenario>();
+  /** @internal */
+  scenarios = new Array<Scenario>();
 
   constructor(items: ResolvableType[]) {
-    this.loadScenarios(items);
+    this.scenarios = this.loadScenarios(items);
 
     this.backend.init(getConfig());
     this.backend.start();
     this.backend.on('request', (request, response) => this.onRequest(request, response));
   }
 
+  /** @internal */
   loadScenarioFile(path: string): Scenario {
     const fileContent = require(getConfig().dir + '/' + path);
     const mocks: Mock[] = Array.isArray(fileContent) ? fileContent : [ fileContent ];
     return new DefaultScenario(mocks);
   }
 
+  /** @internal */
   loadScenarios(items: ResolvableType[]) {
+    const resolved = new Array<Scenario>();
     const mocks: Mock[] = [];
     for (const item of items) {
       if (typeof item === 'string') {
-        this.scenarios.unshift(this.loadScenarioFile(item));
+        resolved.push(this.loadScenarioFile(item));
       } else if ('next' in item) {
-        this.scenarios.unshift(item);
+        resolved.push(item);
       } else {
-        mocks.unshift(item);
+        mocks.push(item);
       }
     }
     if (mocks.length > 0) {
-      this.scenarios.unshift(new DefaultScenario(mocks));
+      resolved.push(new DefaultScenario(mocks));
     }
+    return resolved;
   }
 
+  /** @internal */
   onRequest(request: Request, response: Response) {
-    this.debug('Received %s %s', request.method, request.url);
-    for (const scenario of this.scenarios) {
+    // this.debug('Received %s %s', request.method, request.url);
+    const scenarios = this.overrides.concat(this.scenarios);
+    for (const scenario of scenarios) {
       const match = this.matcher.findMatch(request, scenario.mocks);
       if (!match) {
         continue;
@@ -62,7 +74,7 @@ export class Pistolet {
       }
 
       const status = result.response.status || 200;
-      this.debug('Sending %d %j', status, result.response.data);
+      this.debug('Match for %s %s: %d %j', request.method, request.url, status, result.response.data);
       response.status(status);
       response.send(result.response.data);
       return;
@@ -72,12 +84,22 @@ export class Pistolet {
     response.send({ errorMessage: 'not found' });
   }
 
+  /**
+   * Adds one or multiple scenario(s) to the front of the matching queue.
+   *
+   * These additional scenarios will be discarded after calling reset().
+   */
+  override(...items: ResolvableType[]) {
+    this.overrides = this.loadScenarios(items).concat(this.overrides);
+  }
+
   requestsMade() {
     return this.backend.requestsMade();
   }
 
   reset() {
     this.backend.reset();
+    this.overrides = [];
     this.scenarios.forEach((s) => s.reset && s.reset());
   }
 
