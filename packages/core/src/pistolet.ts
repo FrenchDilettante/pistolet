@@ -11,6 +11,7 @@ export type ResolvableType = Scenario | Mock | string;
 export class Pistolet {
   /** @internal */
   debug = require('debug')('pistolet');
+  missing = this.debug.extend('missing');
 
   /** @internal */
   backend = new (getConfig().backend)();
@@ -82,6 +83,10 @@ export class Pistolet {
 
     response.status(404);
     response.send({ errorMessage: 'not found' });
+    this.missing('Missing scenario for %s %s', request.method, request.url);
+    if (!!request.body) {
+      this.missing('%j', request.body);
+    }
   }
 
   /**
