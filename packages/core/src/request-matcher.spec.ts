@@ -22,7 +22,7 @@ describe('RequestMatcher', () => {
 
   describe('findMatch', () => {
     it('should return the first mock matching the request', () => {
-      const request = partialRequest({ url: '/api/endpoint', method: 'GET' });
+      const request = partialRequest({ path: '/api/endpoint', method: 'GET' });
       expect(matcher.findMatch(request, [ basicRequest ])).toBe(basicRequest);
     });
 
@@ -35,8 +35,32 @@ describe('RequestMatcher', () => {
         },
         response: { data: 'Hello, World!' },
       };
-      const request = partialRequest({ url: '/api/endpoint', method: 'GET', body: { some: 'data' } });
+      const request = partialRequest({ path: '/api/endpoint', method: 'GET', body: { some: 'data' } });
       expect(matcher.findMatch(request, [ requestWithBody ])).toBe(requestWithBody);
+    });
+
+    it('should match the query parameters separately', () => {
+      const requestWithParams = {
+        request: {
+          method: 'GET',
+          path: '/api/endpoint',
+          query: { q: 'search term', startDate: /^\d{4}-\d{2}-\d{2}$/g },
+        },
+        response: { data: 'Hello, World!' },
+      };
+      let request = partialRequest({
+        method: 'GET',
+        path: '/api/endpoint',
+        query: { q: 'search term', startDate: '2010-01-01' },
+      });
+      expect(matcher.findMatch(request, [ requestWithParams ])).toBe(requestWithParams);
+
+      request = partialRequest({
+        method: 'GET',
+        path: '/api/endpoint',
+        query: { q: 'search term', startDate: 'incorrect' },
+      });
+      expect(matcher.findMatch(request, [ requestWithParams ])).toBe(undefined);
     });
 
     it('should not be case sensitive for the method', () => {
@@ -47,7 +71,7 @@ describe('RequestMatcher', () => {
         },
         response: { data: { } },
       };
-      const request = partialRequest({ url: '/api/endpoint', method: 'GET' });
+      const request = partialRequest({ path: '/api/endpoint', method: 'GET' });
       expect(matcher.matches(request, mock)).toBe(true);
     });
 
@@ -58,12 +82,12 @@ describe('RequestMatcher', () => {
         },
         response: { data: { } },
       };
-      const request = partialRequest({ url: '/api/endpoint', method: 'GET' });
+      const request = partialRequest({ path: '/api/endpoint', method: 'GET' });
       expect(matcher.matches(request, mock)).toBe(true);
     });
 
     it('should return undefined if no mock matches the request', () => {
-      const request = partialRequest({ url: '/api/different/endpoint', method: 'POST' });
+      const request = partialRequest({ path: '/api/different/endpoint', method: 'POST' });
       expect(matcher.findMatch(request, [ basicRequest ])).toBeUndefined();
     });
   });

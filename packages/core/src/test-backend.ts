@@ -21,7 +21,7 @@ export class TestBackend extends EventEmitter implements Backend {
   }
 
   request(request: Request): Promise<{ statusCode: number, body: string | object }> {
-    this.entries.push({ method: request.method, path: request.url });
+    this.entries.push({ method: request.method, path: request.path });
     return new Promise((resolve) => {
       let statusCode: number;
       this.emit('request', request, {

@@ -12,7 +12,8 @@ export interface Backend {
 export interface Request {
   body?: any;
   method: string;
-  url: string;
+  query?: object;
+  path: string;
 }
 
 export interface RequestEntry {

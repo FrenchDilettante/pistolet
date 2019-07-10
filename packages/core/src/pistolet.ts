@@ -2,7 +2,8 @@ import { Request, Response } from './backend';
 
 import { getConfig } from './config';
 import { DefaultScenario } from './default-scenario';
-import { Mock, RequestBody } from './mock';
+import { JsonParser } from './json-parser';
+import { Mock } from './mock';
 import { RequestMatcher } from './request-matcher';
 import { Scenario } from './scenario';
 
@@ -21,6 +22,8 @@ export class Pistolet {
   /** @internal */
   overrides = new Array<Scenario>();
   /** @internal */
+  parser = new JsonParser();
+  /** @internal */
   scenarios = new Array<Scenario>();
 
   constructor(items: ResolvableType[]) {
@@ -32,36 +35,12 @@ export class Pistolet {
   }
 
   /** @internal */
-  loadScenarioFile(path: string): Scenario {
-    const fileContent = require(getConfig().dir + '/' + path);
-    const mocks: Mock[] = Array.isArray(fileContent) ? fileContent : [ fileContent ];
-    const regexPattern = /^\/(.*)\/(\w)$/g;
-
-    for (const mock of mocks) {
-      if (typeof mock.request.body !== 'object') {
-        continue;
-      }
-
-      Object.keys(mock.request.body).forEach((key) => {
-        let value: string | RegExp = mock.request.body[key] as string;
-        const result = regexPattern.exec(value);
-        if (!!result) {
-          value = new RegExp(result[1], result[2]);
-        }
-        mock.request.body[key] = value;
-      });
-    }
-
-    return new DefaultScenario(mocks);
-  }
-
-  /** @internal */
   loadScenarios(items: ResolvableType[]) {
     const resolved = new Array<Scenario>();
     const mocks: Mock[] = [];
     for (const item of items) {
       if (typeof item === 'string') {
-        resolved.push(this.loadScenarioFile(item));
+        resolved.push(this.parser.parse(item));
       } else if ('next' in item) {
         resolved.push(item);
       } else {
@@ -93,7 +72,7 @@ export class Pistolet {
       }
 
       const status = result.response.status || 200;
-      this.debug('Match for %s %s: %d %j', request.method, request.url, status, result.response.data);
+      this.debug('Match for %s %s: %d %j', request.method, request.path, status, result.response.data);
       response.status(status);
       response.send(result.response.data);
       return;
@@ -101,9 +80,12 @@ export class Pistolet {
 
     response.status(404);
     response.send({ errorMessage: 'not found' });
-    this.missing('Missing scenario for %s %s', request.method, request.url);
+    this.missing('Missing scenario for %s %s', request.method, request.path);
+    if (!!request.query) {
+      this.missing('Query: %j', request.query);
+    }
     if (!!request.body) {
-      this.missing('%j', request.body);
+      this.missing('Body: %j', request.body);
     }
   }
 
@@ -116,6 +98,9 @@ export class Pistolet {
     this.overrides = this.loadScenarios(items).concat(this.overrides);
   }
 
+  /**
+   * @internal
+   */
   requestsMade() {
     return this.backend.requestsMade();
   }

@@ -2,10 +2,15 @@ export interface RequestBody {
   [key: string]: string | RegExp | RequestBody[] | RequestBody;
 }
 
+export interface RequestQuery {
+  [key: string]: string | RegExp;
+}
+
 export interface RequestMock {
   path: string;
   method?: string;
   body?: RequestBody;
+  query?: RequestQuery;
 }
 
 export interface ResponseMock {

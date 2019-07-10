@@ -38,29 +38,11 @@ describe('Pistolet', () => {
     expect(pistolet).toBeDefined();
   });
 
-  describe('loadScenarioFile()', () => {
-    it('should load a singe mock from a json file', () => {
-      const scenario = pistolet.loadScenarioFile('examples/sample-request');
-      expect(scenario).toBeDefined();
-      expect(scenario instanceof DefaultScenario).toBe(true);
-      expect(scenario.mocks[0].request).toEqual({ method: 'GET', path: '/api/endpoint' });
-    });
-  });
-
   describe('loadScenarios', () => {
     it('should accept a string, and load the JSON file associated', () => {
       const scenarios = pistolet.loadScenarios(['examples/sample-request']);
       expect(scenarios.length).toBe(1);
       expect(scenarios[0].mocks[0].name).toEqual('A basic request');
-    });
-
-    it('should parse RegExp from JSON files', () => {
-      const scenarios = pistolet.loadScenarios(['examples/sample-regex']);
-      expect(scenarios.length).toBe(1);
-      expect(scenarios[0].mocks[0].request.body).toEqual({
-        q: 'search criteria',
-        startDate: /^\d{4}-\d{2}-\d{2}$/g,
-      });
     });
 
     it('should accept an object implementing the Scenario interface', () => {
@@ -86,7 +68,7 @@ describe('Pistolet', () => {
     it('returns the first mock matching the request', async () => {
       const response = await TestBackend.request({
         method: 'GET',
-        url: '/api/endpoint',
+        path: '/api/endpoint',
       });
 
       expect(response.statusCode).toBe(200);
@@ -98,7 +80,7 @@ describe('Pistolet', () => {
     it('returns 404 if not mock is found', async () => {
       const error = await TestBackend.request({
         method: 'POST',
-        url: '/api/endpoint',
+        path: '/api/endpoint',
       });
 
       expect(error.statusCode).toBe(404);
@@ -116,7 +98,7 @@ describe('Pistolet', () => {
 
       const response = await TestBackend.request({
         method: 'GET',
-        url: '/api/endpoint',
+        path: '/api/endpoint',
       });
       expect(response).toEqual({ body: 'this is an override', statusCode: 200 });
     });
@@ -127,7 +109,7 @@ describe('Pistolet', () => {
       pistolet.override('examples/sample-request');
       expect(pistolet.overrides.length).toBe(1);
 
-      await TestBackend.request({ method: 'GET', url: '/api/endpoint' });
+      await TestBackend.request({ method: 'GET', path: '/api/endpoint' });
       expect(pistolet.requestsMade()).toEqual([
         { method: 'GET', path: '/api/endpoint' },
       ]);

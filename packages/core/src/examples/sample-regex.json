@@ -1,14 +1,47 @@
-{
-  "name": "A request with regular expressions",
-  "request": {
-    "method": "POST",
-    "path": "/api/endpoint",
-    "body": {
-      "q": "search criteria",
-      "startDate": "/^\\d{4}-\\d{2}-\\d{2}$/g"
+[
+  {
+    "name": "A request with regular expressions",
+    "request": {
+      "method": "POST",
+      "path": "/api/endpoint",
+      "body": {
+        "q": "search criteria",
+        "startDate": "/^\\d{4}-\\d{2}-\\d{2}$/g"
+      }
+    },
+    "response": {
+      "data": "Hello, World!"
     }
   },
-  "response": {
-    "data": "Hello, World!"
+  {
+    "name": "A request with deep regular expressions",
+    "request": {
+      "method": "POST",
+      "path": "/api/endpoint",
+      "body": {
+        "deep": {
+          "endDate": "/^\\d{4}-\\d{2}-\\d{2}$/g"
+        },
+        "q": "search criteria",
+        "startDate": "/^\\d{4}-\\d{2}-\\d{2}$/g"
+      }
+    },
+    "response": {
+      "data": "Hello, World!"
+    }
+  },
+  {
+    "name": "A request with regular expressions in the query",
+    "request": {
+      "method": "GET",
+      "path": "/api/endpoint",
+      "query": {
+        "q": "search criteria",
+        "startDate": "/^\\d{4}-\\d{2}-\\d{2}$/g"
+      }
+    },
+    "response": {
+      "data": "Hello, World!"
+    }
   }
-}
+]

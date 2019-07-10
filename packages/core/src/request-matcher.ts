@@ -13,12 +13,16 @@ export class RequestMatcher {
   }
 
   matches(request: Request, mock: Mock): boolean {
-    if (request.url !== mock.request.path) {
+    if (request.path !== mock.request.path) {
       return false;
     }
 
     if (mock.request.method && request.method !== mock.request.method.toUpperCase()) {
       return false;
+    }
+
+    if (!!request.query) {
+      return bodyEqual(mock.request.query, request.query);
     }
 
     if (mock.request.body === undefined) {
