@@ -40,7 +40,7 @@ describe('Pistolet', () => {
 
   describe('loadScenarioFile()', () => {
     it('should load a singe mock from a json file', () => {
-      const scenario = pistolet.loadScenarioFile('sample-request');
+      const scenario = pistolet.loadScenarioFile('examples/sample-request');
       expect(scenario).toBeDefined();
       expect(scenario instanceof DefaultScenario).toBe(true);
       expect(scenario.mocks[0].request).toEqual({ method: 'GET', path: '/api/endpoint' });
@@ -49,9 +49,18 @@ describe('Pistolet', () => {
 
   describe('loadScenarios', () => {
     it('should accept a string, and load the JSON file associated', () => {
-      const scenarios = pistolet.loadScenarios(['sample-request']);
+      const scenarios = pistolet.loadScenarios(['examples/sample-request']);
       expect(scenarios.length).toBe(1);
       expect(scenarios[0].mocks[0].name).toEqual('A basic request');
+    });
+
+    it('should parse RegExp from JSON files', () => {
+      const scenarios = pistolet.loadScenarios(['examples/sample-regex']);
+      expect(scenarios.length).toBe(1);
+      expect(scenarios[0].mocks[0].request.body).toEqual({
+        q: 'search criteria',
+        startDate: /^\d{4}-\d{2}-\d{2}$/g,
+      });
     });
 
     it('should accept an object implementing the Scenario interface', () => {
@@ -70,7 +79,7 @@ describe('Pistolet', () => {
 
   describe('onRequest()', () => {
     beforeEach(() => {
-      pistolet.override(spyScenario, 'sample-request');
+      pistolet.override(spyScenario, 'examples/sample-request');
       (spyScenario.next as jasmine.Spy).calls.reset();
     });
 
@@ -99,7 +108,7 @@ describe('Pistolet', () => {
 
   describe('override()', () => {
     it('should place a new scenario at the front of the queue', async () => {
-      pistolet.scenarios = pistolet.loadScenarios(['sample-request']);
+      pistolet.scenarios = pistolet.loadScenarios(['examples/sample-request']);
       pistolet.override({
         request: { method: 'GET', path: '/api/endpoint' },
         response: { data: 'this is an override' },
@@ -115,7 +124,7 @@ describe('Pistolet', () => {
 
   describe('requestsMade()', () => {
     it('should return the entries made', async () => {
-      pistolet.override('sample-request');
+      pistolet.override('examples/sample-request');
       expect(pistolet.overrides.length).toBe(1);
 
       await TestBackend.request({ method: 'GET', url: '/api/endpoint' });

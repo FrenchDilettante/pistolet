@@ -1,7 +1,11 @@
+export interface RequestBody {
+  [key: string]: string | RegExp | RequestBody[] | RequestBody;
+}
+
 export interface RequestMock {
   path: string;
   method?: string;
-  body?: object | string;
+  body?: RequestBody;
 }
 
 export interface ResponseMock {
