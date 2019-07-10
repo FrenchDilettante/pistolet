@@ -12,6 +12,7 @@ export interface Backend {
 export interface Request {
   body?: any;
   method: string;
+  query?: object;
   url: string;
 }
 

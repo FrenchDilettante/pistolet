@@ -39,6 +39,30 @@ describe('RequestMatcher', () => {
       expect(matcher.findMatch(request, [ requestWithBody ])).toBe(requestWithBody);
     });
 
+    it('should match the query parameters separately', () => {
+      const requestWithParams = {
+        request: {
+          method: 'GET',
+          path: '/api/endpoint',
+          query: { q: 'search term', startDate: /^\d{4}-\d{2}-\d{2}$/g },
+        },
+        response: { data: 'Hello, World!' },
+      };
+      let request = partialRequest({
+        method: 'GET',
+        query: { q: 'search term', startDate: '2010-01-01' },
+        url: '/api/endpoint',
+      });
+      expect(matcher.findMatch(request, [ requestWithParams ])).toBe(requestWithParams);
+
+      request = partialRequest({
+        method: 'GET',
+        query: { q: 'search term', startDate: 'incorrect' },
+        url: '/api/endpoint',
+      });
+      expect(matcher.findMatch(request, [ requestWithParams ])).toBe(undefined);
+    });
+
     it('should not be case sensitive for the method', () => {
       const mock: Mock = {
         request: {

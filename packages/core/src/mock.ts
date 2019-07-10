@@ -2,6 +2,7 @@ export interface RequestMock {
   path: string;
   method?: string;
   body?: object | string;
+  query?: object;
 }
 
 export interface ResponseMock {

@@ -21,6 +21,10 @@ export class RequestMatcher {
       return false;
     }
 
+    if (!!request.query) {
+      return bodyEqual(mock.request.query, request.query);
+    }
+
     if (mock.request.body === undefined) {
       return true;
     }
