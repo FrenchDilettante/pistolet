@@ -1,5 +1,5 @@
 import { DefaultScenario } from './default-scenario';
-const basicMock = require('./sample-request');
+const basicMock = require('./examples/sample-request');
 
 describe('DefaultScenario', () => {
   it('should return the first mock matched', () => {

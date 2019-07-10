@@ -6,6 +6,7 @@
   "scripts": {
     "prebuild": "rimraf packages/*/dist",
     "build": "rollup --config rollup.config.js",
+    "prepublish": "npm run build",
     "start": "rollup --config rollup.config.js --watch",
     "test": "jest --coverage",
     "lint": "npm run lint:src && npm run lint:test",

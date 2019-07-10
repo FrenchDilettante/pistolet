@@ -8,7 +8,7 @@ describe('RequestMatcher', () => {
   let basicRequest: Mock;
   beforeEach(() => {
     matcher = new RequestMatcher();
-    basicRequest = JSON.parse(readFileSync(__dirname + '/sample-request.json', 'UTF-8'));
+    basicRequest = JSON.parse(readFileSync(__dirname + '/examples/sample-request.json', 'UTF-8'));
   });
 
   // Typescript trick to allow to pass partial objects as "Request"

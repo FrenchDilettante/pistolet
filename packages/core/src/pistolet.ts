@@ -2,7 +2,7 @@ import { Request, Response } from './backend';
 
 import { getConfig } from './config';
 import { DefaultScenario } from './default-scenario';
-import { Mock } from './mock';
+import { Mock, RequestBody } from './mock';
 import { RequestMatcher } from './request-matcher';
 import { Scenario } from './scenario';
 
@@ -11,6 +11,7 @@ export type ResolvableType = Scenario | Mock | string;
 export class Pistolet {
   /** @internal */
   debug = require('debug')('pistolet');
+  /** @internal */
   missing = this.debug.extend('missing');
 
   /** @internal */
@@ -34,6 +35,23 @@ export class Pistolet {
   loadScenarioFile(path: string): Scenario {
     const fileContent = require(getConfig().dir + '/' + path);
     const mocks: Mock[] = Array.isArray(fileContent) ? fileContent : [ fileContent ];
+    const regexPattern = /^\/(.*)\/(\w)$/g;
+
+    for (const mock of mocks) {
+      if (typeof mock.request.body !== 'object') {
+        continue;
+      }
+
+      Object.keys(mock.request.body).forEach((key) => {
+        let value: string | RegExp = mock.request.body[key] as string;
+        const result = regexPattern.exec(value);
+        if (!!result) {
+          value = new RegExp(result[1], result[2]);
+        }
+        mock.request.body[key] = value;
+      });
+    }
+
     return new DefaultScenario(mocks);
   }
 
