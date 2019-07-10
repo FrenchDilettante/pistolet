@@ -12,8 +12,8 @@ export class AngularBackend extends EventEmitter implements Backend {
   }
 
   process(request: Request, response: Response) {
-    this.debug('Received %s %s', request.method, request.url);
-    this.entries.push({ method: request.method, path: request.url });
+    this.debug('Received %s %s', request.method, request.path);
+    this.entries.push({ method: request.method, path: request.path });
     this.emit('request', request, response);
   }
 
