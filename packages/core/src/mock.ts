@@ -1,6 +1,6 @@
 export interface RequestMock {
   path: string;
-  method: string;
+  method?: string;
   body?: object | string;
 }
 

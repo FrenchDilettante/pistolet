@@ -17,7 +17,7 @@ export class RequestMatcher {
       return false;
     }
 
-    if (request.method !== mock.request.method) {
+    if (mock.request.method && request.method !== mock.request.method.toUpperCase()) {
       return false;
     }
 
