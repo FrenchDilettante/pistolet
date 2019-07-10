@@ -98,9 +98,6 @@ export class Pistolet {
     this.overrides = this.loadScenarios(items).concat(this.overrides);
   }
 
-  /**
-   * @internal
-   */
   requestsMade() {
     return this.backend.requestsMade();
   }
