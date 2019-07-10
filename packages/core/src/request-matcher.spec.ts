@@ -32,11 +32,24 @@ describe('RequestMatcher', () => {
           body: { some: 'data' },
           method: 'GET',
           path: '/api/endpoint',
+          query: {},
         },
         response: { data: 'Hello, World!' },
       };
       const request = partialRequest({ path: '/api/endpoint', method: 'GET', body: { some: 'data' } });
       expect(matcher.findMatch(request, [ requestWithBody ])).toBe(requestWithBody);
+    });
+
+    it('should compare whole URLs', () => {
+      const requestWithParams = {
+        request: {
+          method: 'GET',
+          url: '/api/endpoint?q=criteria',
+        },
+        response: { data: 'Hello, World!' },
+      };
+      const request = partialRequest({ body: { }, method: 'GET', url: '/api/endpoint?q=criteria' });
+      expect(matcher.findMatch(request, [ requestWithParams ])).toBe(requestWithParams);
     });
 
     it('should match the query parameters separately', () => {

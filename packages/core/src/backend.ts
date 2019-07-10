@@ -14,6 +14,7 @@ export interface Request {
   method: string;
   query?: object;
   path: string;
+  url: string;
 }
 
 export interface RequestEntry {

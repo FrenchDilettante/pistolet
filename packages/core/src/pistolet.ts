@@ -80,13 +80,7 @@ export class Pistolet {
 
     response.status(404);
     response.send({ errorMessage: 'not found' });
-    this.missing('Missing scenario for %s %s', request.method, request.path);
-    if (!!request.query) {
-      this.missing('Query: %j', request.query);
-    }
-    if (!!request.body) {
-      this.missing('Body: %j', request.body);
-    }
+    this.missing('Missing scenario for %s %s %j', request.method, request.url, request.body);
   }
 
   /**

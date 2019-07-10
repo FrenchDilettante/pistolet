@@ -25,6 +25,7 @@ describe('ExpressBackend', () => {
 
         expect(request.method).toBe('GET');
         expect(request.path).toBe('/query');
+        expect(request.url).toBe('/query');
 
         expect(typeof response.status).toBe('function');
         expect(typeof response.send).toBe('function');
@@ -40,6 +41,7 @@ describe('ExpressBackend', () => {
 
         expect(request.path).toBe('/query');
         expect(request.query).toEqual({ q: 'criteria' });
+        expect(request.url).toBe('/query?q=criteria');
         done();
       });
       rp('http://localhost:8080/query?q=criteria');

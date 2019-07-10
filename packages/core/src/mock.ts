@@ -7,7 +7,8 @@ export interface RequestQuery {
 }
 
 export interface RequestMock {
-  path: string;
+  path?: string;
+  url?: string;
   method?: string;
   body?: RequestBody;
   query?: RequestQuery;
