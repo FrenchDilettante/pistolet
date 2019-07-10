@@ -1,6 +1,6 @@
 {
   "name": "pistolet-express",
-  "version": "0.8.0",
+  "version": "1.0.0-alpha.0",
   "description": "Express integration for Pistolet",
   "author": "Emmanuel Bourgerie <manu@bourgerie.fr>",
   "license": "MIT",
