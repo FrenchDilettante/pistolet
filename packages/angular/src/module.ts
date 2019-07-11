@@ -52,7 +52,7 @@ export class HttpClient {
 
   request(method: string, url: string, body?: any) {
     const response = new RxResponse();
-    this.backend.process({ method, path: url, body }, response);
+    this.backend.process({ method, path: url, url, body }, response);
     return response;
   }
 }

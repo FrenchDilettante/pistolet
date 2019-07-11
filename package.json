@@ -21,21 +21,21 @@
   },
   "homepage": "https://github.com/FrenchHipster/pistolet",
   "devDependencies": {
-    "@types/jest": "^23.3.10",
-    "@types/request-promise": "^4.1.42",
+    "@types/jest": "^24.0.15",
+    "@types/request-promise": "^4.1.44",
     "@types/request-promise-native": "^1.0.16",
     "jest": "^24.8.0",
-    "lerna": "^3.14.1",
+    "lerna": "^3.15.0",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2",
+    "request-promise": "^4.2.4",
     "request-promise-native": "^1.0.7",
-    "rimraf": "^2.6.2",
-    "rollup": "^0.67.0",
-    "rollup-plugin-typescript2": "^0.21.0",
+    "rimraf": "^2.6.3",
+    "rollup": "^1.16.7",
+    "rollup-plugin-typescript2": "^0.21.2",
     "ts-jest": "^24.0.2",
-    "tslint": "^5.11.0",
-    "tslint-jasmine-rules": "^1.5.1",
-    "typescript": "^3.1.6"
+    "tslint": "^5.18.0",
+    "tslint-jasmine-rules": "^1.6.0",
+    "typescript": "^3.5.3"
   },
   "dependencies": {}
 }
