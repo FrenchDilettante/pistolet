@@ -105,3 +105,42 @@ export class SampleClassScenario implements Scenario {
   }
 }
 ```
+
+### Matching rules
+
+#### URL vs path & query
+
+URL matching will perform a simple string comparison:
+
+```json
+{
+  "method": "GET",
+  "url": "/api/search?q=criteria"
+}
+```
+
+You can also use `path` and `query` to the same effect:
+
+```json
+{
+  "method": "GET",
+  "path": "/api/search",
+  "query": {
+    "q": "criteria"
+  }
+}
+```
+
+Using query parameters will perform an object comparison, which is not sensitive to the order in which the parameters come in the URL.
+
+Query parameters can also use regular expressions:
+
+```json
+{
+  "method": "GET",
+  "path": "/api/search",
+  "query": {
+    "q": "/\\w+/g"
+  }
+}
+```
