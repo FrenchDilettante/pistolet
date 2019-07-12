@@ -27,6 +27,11 @@ describe('JsonParser', () => {
       expect(scenario.mocks[1].request.body.deep.endDate).toEqual(/^\d{4}-\d{2}-\d{2}$/g);
       expect(scenario.mocks[2].request.query.startDate).toEqual(/^\d{4}-\d{2}-\d{2}$/g);
     });
+
+    it('should throw an exception if the file does not exist', () => {
+      expect(() => parser.parse('not-existent'))
+        .toThrowError('Could not load "not-existent", file does not exist');
+    });
   });
 
   describe('parseBody()', () => {

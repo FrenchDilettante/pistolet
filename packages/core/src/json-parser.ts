@@ -1,10 +1,16 @@
+import { existsSync } from 'fs';
 import { getConfig } from './config';
 import { DefaultScenario } from './default-scenario';
 import { Mock, RequestBody, RequestQuery } from './mock';
 
 export class JsonParser {
   parse(filename: string) {
-    const fileContent = require(getConfig().dir + '/' + filename);
+    const fullpath = `${getConfig().dir}/${filename}.json`;
+    if (!existsSync(fullpath)) {
+      throw new Error(`Could not load "${filename}", file does not exist`);
+    }
+
+    const fileContent = require(fullpath);
     const mocks: Mock[] = Array.isArray(fileContent) ? fileContent : [ fileContent ];
 
     for (const mock of mocks) {

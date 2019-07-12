@@ -30,6 +30,7 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '/jest.config.js',
+    '/packages/core/src/test-backend.ts',
     '/rollup.config.js',
     '/test/',
     'tsconfig.json',

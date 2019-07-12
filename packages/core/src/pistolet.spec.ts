@@ -57,6 +57,14 @@ describe('Pistolet', () => {
       expect(scenarios.length).toBe(1);
       expect(scenarios[0].mocks[0].request.path).toEqual('/request');
     });
+
+    it('should gracefully fail when a single scenario is missing', () => {
+      expect(() => {
+        const scenarios = pistolet.loadScenarios(['examples/sample-request', 'non-existent']);
+        expect(scenarios.length).toBe(1);
+        expect(scenarios[0].mocks[0].name).toEqual('A basic request');
+      }).not.toThrow();
+    });
   });
 
   describe('onRequest()', () => {
@@ -68,7 +76,7 @@ describe('Pistolet', () => {
     it('returns the first mock matching the request', async () => {
       const response = await TestBackend.request({
         method: 'GET',
-        path: '/api/endpoint',
+        url: '/api/endpoint',
       });
 
       expect(response.statusCode).toBe(200);
@@ -80,7 +88,7 @@ describe('Pistolet', () => {
     it('returns 404 if not mock is found', async () => {
       const error = await TestBackend.request({
         method: 'POST',
-        path: '/api/endpoint',
+        url: '/api/endpoint',
       });
 
       expect(error.statusCode).toBe(404);
@@ -98,7 +106,7 @@ describe('Pistolet', () => {
 
       const response = await TestBackend.request({
         method: 'GET',
-        path: '/api/endpoint',
+        url: '/api/endpoint',
       });
       expect(response).toEqual({ body: 'this is an override', statusCode: 200 });
     });
@@ -109,7 +117,7 @@ describe('Pistolet', () => {
       pistolet.override('examples/sample-request');
       expect(pistolet.overrides.length).toBe(1);
 
-      await TestBackend.request({ method: 'GET', path: '/api/endpoint' });
+      await TestBackend.request({ method: 'GET', url: '/api/endpoint' });
       expect(pistolet.requestsMade()).toEqual([
         { method: 'GET', path: '/api/endpoint' },
       ]);

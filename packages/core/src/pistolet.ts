@@ -39,12 +39,16 @@ export class Pistolet {
     const resolved = new Array<Scenario>();
     const mocks: Mock[] = [];
     for (const item of items) {
-      if (typeof item === 'string') {
-        resolved.push(this.parser.parse(item));
-      } else if ('next' in item) {
-        resolved.push(item);
-      } else {
-        mocks.push(item);
+      try {
+        if (typeof item === 'string') {
+          resolved.push(this.parser.parse(item));
+        } else if ('next' in item) {
+          resolved.push(item);
+        } else {
+          mocks.push(item);
+        }
+      } catch (e) {
+        console.error(e);
       }
     }
     if (mocks.length > 0) {
