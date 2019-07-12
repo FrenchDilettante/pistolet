@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "description": "Tooling scripts for Pistolet packages",
   "scripts": {
+    "postinstall": "lerna exec npm ci",
     "prebuild": "rimraf packages/*/dist",
     "build": "rollup --config rollup.config.js",
     "prepublish": "npm run build",
