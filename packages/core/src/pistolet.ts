@@ -3,7 +3,7 @@ import { Request, Response } from './backend';
 import { getConfig } from './config';
 import { DefaultScenario } from './default-scenario';
 import { JsonParser } from './json-parser';
-import { Mock } from './mock';
+import { Mock, ResponseMock } from './mock';
 import { RequestMatcher } from './request-matcher';
 import { Scenario } from './scenario';
 
@@ -65,6 +65,11 @@ export class Pistolet {
   }
 
   /** @internal */
+  notFoundResponse(): ResponseMock {
+    return getConfig().notFoundResponse || { status: 404, data: { errorMessage: 'not found' } };
+  }
+
+  /** @internal */
   async onRequest(request: Request, response: Response) {
     const scenarios = this.overrides.concat(this.scenarios);
     for (const scenario of scenarios) {
@@ -90,8 +95,9 @@ export class Pistolet {
       return;
     }
 
-    response.status(404);
-    response.send({ errorMessage: 'not found' });
+    const res = this.notFoundResponse();
+    response.status(res.status);
+    response.send(res.data);
     this.missing('Missing scenario for %s %s %j', request.method, request.url, request.body);
   }
 

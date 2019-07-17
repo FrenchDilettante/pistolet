@@ -1,12 +1,12 @@
 import { Backend } from './backend';
+import { ResponseMock } from './mock';
 
-interface BackendConstructor {
-  new (): Backend;
-}
+type BackendConstructor = new () => Backend;
 
 export interface PistoletConfig {
   backend: BackendConstructor;
   dir: string;
+  notFoundResponse?: ResponseMock;
   [key: string]: any;
 }
 

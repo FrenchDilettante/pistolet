@@ -1,4 +1,4 @@
-import { setConfig } from './config';
+import { getConfig, setConfig } from './config';
 import { DefaultScenario } from './default-scenario';
 import { Pistolet } from './pistolet';
 import { Scenario } from './scenario';
@@ -96,14 +96,26 @@ describe('Pistolet', () => {
       expect(response.body).toEqual('Hello, (pause), World!');
     });
 
-    it('returns 404 if not mock is found', async () => {
-      const error = await TestBackend.request({
-        method: 'POST',
-        url: '/api/endpoint',
+    describe('Not found', () => {
+      it('returns 404 if not mock is found', async () => {
+        const error = await TestBackend.request({
+          method: 'POST',
+          url: '/api/endpoint',
+        });
+        expect(error.statusCode).toBe(404);
+        expect(error.body).toEqual({ errorMessage: 'not found' });
       });
 
-      expect(error.statusCode).toBe(404);
-      expect(error.body).toEqual({ errorMessage: 'not found' });
+      it('should allow to configure the 404 message', async () => {
+        getConfig().notFoundResponse = { status: 404, data: { custom: 'error message' } };
+
+        const error = await TestBackend.request({
+          method: 'POST',
+          url: '/api/endpoint',
+        });
+        expect(error.statusCode).toBe(404);
+        expect(error.body).toEqual({ custom: 'error message' });
+      });
     });
   });
 
