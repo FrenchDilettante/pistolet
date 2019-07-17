@@ -65,8 +65,7 @@ export class Pistolet {
   }
 
   /** @internal */
-  onRequest(request: Request, response: Response) {
-    // this.debug('Received %s %s', request.method, request.url);
+  async onRequest(request: Request, response: Response) {
     const scenarios = this.overrides.concat(this.scenarios);
     for (const scenario of scenarios) {
       const match = this.matcher.findMatch(request, scenario.mocks);
@@ -82,10 +81,12 @@ export class Pistolet {
         continue;
       }
 
-      const status = result.response.status || 200;
-      this.debug('Match for %s %s: %d %j', request.method, request.path, status, result.response.data);
+      const resolved = 'then' in result ? (await result).response : result.response;
+
+      const status = resolved.status || 200;
+      this.debug('Match for %s %s: %d %j', request.method, request.path, status, resolved.data);
       response.status(status);
-      response.send(result.response.data);
+      response.send(resolved.data);
       return;
     }
 

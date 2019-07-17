@@ -92,8 +92,9 @@ export const SampleObjectScenario: Scenario = {
   next(request: Request, response: Response, match: Mock) {
     // Simply accept and send the mock
     response.status(200).send(match);
+    return true;
   }
-}
+};
 
 export class SampleClassScenario implements Scenario {
   mocks: Mock[] = [/* ... */];
@@ -102,11 +103,19 @@ export class SampleClassScenario implements Scenario {
     setTimeout(() => {
       response.status(503).send({ errorMessage: 'Some Error' });
     }, 1000);
+    return true;
   }
 }
 ```
 
-### Matching rules
+At the end of `next()`, you can return:
+
+* A `Mock` object (same type as the `match` parameter), which will be sent immediately
+* A `Promise<Mock>` object, which will be sent when the promise resolves
+* `true`, to indicate the scenario has a custom logic and will handle the response
+* `false` or `undefined`, to indicate that there was no match
+
+### JSON format
 
 #### URL vs path & query
 
@@ -144,3 +153,15 @@ Query parameters can also use regular expressions:
   }
 }
 ```
+
+#### Delayed responses
+
+Pistolet will return the reponse after `delay` milliseconds if the property is present:
+```json
+{
+  "response": {
+    "delay": 200,
+    "data": { "delayed": "response", "after": "200ms" }
+  }
+}
+``` 

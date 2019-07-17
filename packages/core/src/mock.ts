@@ -17,6 +17,7 @@ export interface RequestMock {
 export interface ResponseMock {
   data: object | string;
   status?: number;
+  delay?: number;
 }
 
 export interface Mock {
@@ -25,4 +26,4 @@ export interface Mock {
   response: ResponseMock;
 }
 
-export type MockMatch = Mock | boolean | undefined;
+export type MockMatch = Mock | Promise<Mock> | boolean | undefined;

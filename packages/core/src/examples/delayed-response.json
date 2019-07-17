@@ -1,0 +1,11 @@
+{
+  "name": "A delayed response",
+  "request": {
+    "method": "GET",
+    "path": "/api/endpoint"
+  },
+  "response": {
+    "delay": 50,
+    "data": "Hello, (pause), World!"
+  }
+}

@@ -85,6 +85,17 @@ describe('Pistolet', () => {
       expect(spyScenario.next).not.toHaveBeenCalled();
     });
 
+    it('should wait for an async mock', async () => {
+      pistolet.override(spyScenario, 'examples/delayed-response');
+      const response = await TestBackend.request({
+        method: 'GET',
+        url: '/api/endpoint',
+      });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toEqual('Hello, (pause), World!');
+    });
+
     it('returns 404 if not mock is found', async () => {
       const error = await TestBackend.request({
         method: 'POST',
