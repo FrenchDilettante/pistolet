@@ -34,6 +34,11 @@ export class Pistolet {
     this.backend.on('request', (request, response) => this.onRequest(request, response));
   }
 
+  lastRequest() {
+    const requests = this.requestsMade();
+    return requests[requests.length - 1];
+  }
+
   /** @internal */
   loadScenarios(items: ResolvableType[]) {
     const resolved = new Array<Scenario>();
@@ -48,6 +53,8 @@ export class Pistolet {
           mocks.push(item);
         }
       } catch (e) {
+        // It's a feature, not a bug!
+        // tslint:disable-next-line:no-console
         console.error(e);
       }
     }

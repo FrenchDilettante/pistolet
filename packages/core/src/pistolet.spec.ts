@@ -115,12 +115,12 @@ describe('Pistolet', () => {
   describe('requestsMade()', () => {
     it('should return the entries made', async () => {
       pistolet.override('examples/sample-request');
-      expect(pistolet.overrides.length).toBe(1);
 
       await TestBackend.request({ method: 'GET', url: '/api/endpoint' });
       expect(pistolet.requestsMade()).toEqual([
         { method: 'GET', path: '/api/endpoint' },
       ]);
+      expect(pistolet.lastRequest()).toEqual({ method: 'GET', path: '/api/endpoint' });
     });
   });
 
