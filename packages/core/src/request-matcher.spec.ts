@@ -99,6 +99,18 @@ describe('RequestMatcher', () => {
       expect(matcher.matches(request, mock)).toBe(true);
     });
 
+    it('should match the regular expression in the url', () => {
+      const mock: Mock = {
+        request: {
+          method: 'get',
+          path: /^\/api\/.*\/endpoint$/,
+        },
+        response: {data: {}},
+      };
+      const request = partialRequest({ path: '/api/exampleRegExp/endpoint', method: 'GET' });
+      expect(matcher.matches(request, mock)).toBe(true);
+    });
+
     it('should return undefined if no mock matches the request', () => {
       const request = partialRequest({ path: '/api/different/endpoint', method: 'POST' });
       expect(matcher.findMatch(request, [ basicRequest ])).toBeUndefined();

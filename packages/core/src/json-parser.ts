@@ -11,11 +11,13 @@ export class JsonParser {
     }
 
     const fileContent = require(fullpath);
-    const mocks: Mock[] = Array.isArray(fileContent) ? fileContent : [ fileContent ];
+    const mocks = Array.isArray(fileContent) ? fileContent : [ fileContent ];
 
     for (const mock of mocks) {
       const { request } = mock;
 
+      request.path = typeof request.path !== 'undefined' ? this.parseRegex(request.path) : request.path;
+      request.url = typeof request.url !== 'undefined' ? this.parseRegex(request.url) : request.url;
       request.body = typeof request.body === 'object' ? this.parseBody(request.body) : request.body;
       request.query = typeof request.query === 'object' ? this.parseQuery(request.query) : request.query;
     }

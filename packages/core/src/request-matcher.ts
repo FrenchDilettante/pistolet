@@ -27,12 +27,12 @@ export class RequestMatcher {
     }
 
     if (!!mock.request.url) {
-      if (request.url !== mock.request.url) {
+      if (!this.urlMatches(request.url, mock.request.url)) {
         return false;
       }
       return this.bodyMatches(mock.request.body, request.body);
     } else {
-      if (!!mock.request.path && request.path !== mock.request.path) {
+      if (!mock.request.path || !this.urlMatches(request.path, mock.request.path)) {
         return false;
       }
 
@@ -41,6 +41,14 @@ export class RequestMatcher {
       }
 
       return this.bodyMatches(mock.request.body, request.body);
+    }
+  }
+
+  urlMatches(url: string, expectation: string | RegExp): boolean {
+    if (expectation instanceof RegExp) {
+      return expectation.test(url);
+    } else {
+      return url === expectation;
     }
   }
 }
