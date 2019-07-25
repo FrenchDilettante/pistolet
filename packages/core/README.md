@@ -142,12 +142,12 @@ You can also use `path` and `query` to the same effect:
 
 Using query parameters will perform an object comparison, which is not sensitive to the order in which the parameters come in the URL.
 
-Query parameters can also use regular expressions:
+URLs, paths and query parameters can use regular expressions:
 
 ```json
 {
   "method": "GET",
-  "path": "/api/search",
+  "path": "/\\/api\\/search\\/\\w+/g",
   "query": {
     "q": "/\\w+/g"
   }

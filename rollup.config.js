@@ -14,12 +14,16 @@ export default [{
   input: 'packages/core/src/index.ts',
   external: [
     'debug',
+    'fs',
   ],
   plugins: [ typescriptPlugin('core') ],
   output: {
     file: 'packages/core/dist/pistolet.js',
     format: 'umd',
     name: 'pistolet',
+    globals: {
+      fs: 'fs',
+    },
   },
 }, {
   input: 'packages/angular/src/index.ts',
