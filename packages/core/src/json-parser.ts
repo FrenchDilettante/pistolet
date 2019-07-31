@@ -57,7 +57,7 @@ export class JsonParser {
   }
 
   parseRegex(input: string) {
-    const result = /^\/(.*)\/(\w)$/g.exec(input);
+    const result = /^\/(.*)\/([g|i|m|s|u|y])$/g.exec(input);
     if (!!result) {
       return new RegExp(result[1], result[2]);
     }
