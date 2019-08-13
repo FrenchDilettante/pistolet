@@ -31,7 +31,9 @@ export class JsonParser {
 
     for (const key of keys) {
       let value = body[key];
-      if (Array.isArray(value)) {
+      if (value === undefined || value === null) {
+        // do nothing
+      } else if (Array.isArray(value)) {
         // TODO handle regexes in arrays
       } else if (typeof value === 'object') {
         value = this.parseBody(value);
